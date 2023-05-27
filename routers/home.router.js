@@ -1,9 +1,8 @@
 
 module.exports= function(router) {
-    const homeController = require('../controllers/home.controller');
+    const loginController = require('../controllers/login.controller');
     
-    router.get('/', homeController.home);
-    router.post('/loginstudent', homeController.loginStudent);
-    router.post('/loginteacher', homeController.loginTeacher);
-    // router.post('/loginstudent', homeController.loginAdmin);
+    router.post('/loginstudent', loginController.loginStudent);
+    router.post('/loginteacher', loginController.loginTeacher);
+    router.post('/loginadmin', loginController.loginAdmin);
 }

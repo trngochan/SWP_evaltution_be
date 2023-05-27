@@ -1,11 +1,6 @@
 const jwt = require("jsonwebtoken");
 const Student = require("../models/student.model");
 
-exports.home = function (req, res) {
-  req.session.a = 1;
-  res.send(req.session);
-};
-
 exports.loginStudent = function (req, res) {
   Student.login(req.body, function (respone) {
     console.log(respone.length);
@@ -13,7 +8,8 @@ exports.loginStudent = function (req, res) {
       var token = jwt.sign(
         {
           username: respone?.[0]?.username,
-          password: respone?.[0]?.password,
+          role: respone?.[0]?.role,
+          id: respone?.[0]?.id
         },
         "mk"
       );
@@ -34,7 +30,32 @@ exports.loginTeacher = function (req, res) {
       var token = jwt.sign(
         {
           username: respone?.[0]?.username,
-          password: respone?.[0]?.password,
+          role: respone?.[0]?.role,
+          id: respone?.[0]?.id
+        },
+        "mk"
+      );
+    } else {
+      return res.status(401).json({
+        message: "Username or password is incorrect",
+      });
+    }
+    return res.json({
+      token: token,
+      data: respone,
+    });
+  });
+};
+
+exports.loginAdmin = function (req, res) {
+  Student.login(req.body, function (respone) {
+    console.log(respone.length);
+    if (respone.length > 0) {
+      var token = jwt.sign(
+        {
+          username: respone?.[0]?.username,
+          role: respone?.[0]?.role,
+          id: respone?.[0]?.id
         },
         "mk"
       );

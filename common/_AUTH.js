@@ -3,7 +3,6 @@ var jwt = require('jsonwebtoken');
 const checkLogin = (req, res, next) => {
   try {
     var token = req.cookies.token;
-    console.log(token);
 
     var data = jwt.verify(token, "mk");
     console.log(data);
@@ -18,6 +17,48 @@ const checkLogin = (req, res, next) => {
   }
 };
 
+const checkStudent = (req, res, next) => {
+  try {
+
+    if (req.params.data.role == 'std') {
+      next();
+    }
+  } catch (error) {
+    res.status(401).json({
+      message: "Token khong hop le",
+    });
+  }
+};
+
+const checkTeacher = (req, res, next) => {
+  try {
+
+    if (req.params.data.role == 'teach') {
+      next();
+    }
+  } catch (error) {
+    res.status(401).json({
+      message: "Token khong hop le",
+    });
+  }
+};
+
+const checkAdmin = (req, res, next) => {
+  try {
+
+    if (req.params.data.role == 'admin') {
+      next();
+    }
+  } catch (error) {
+    res.status(401).json({
+      message: "Token khong hop le",
+    });
+  }
+};
+
 module.exports = {
   checkLogin,
+  checkAdmin,
+  checkTeacher,
+  checkStudent
 };

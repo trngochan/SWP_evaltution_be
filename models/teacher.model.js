@@ -9,7 +9,7 @@ const Teacher = function (teacher) {
   Student.login = function (data,result) {
     const param = [data.username, data.password]
     try {
-        db.query('SELECT username, password, role from lecture where username = ? && password = ?', param,function (err, data) {
+        db.query('SELECT username, role, id from lecture where username = ? && password = ?', param,function (err, data) {
             if(err) {
                 result(err);
             }
