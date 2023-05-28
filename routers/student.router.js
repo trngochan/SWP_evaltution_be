@@ -5,4 +5,5 @@ module.exports= function(router) {
     router.get('/student/:project/project', studentController.getByProjectId);
     router.get('/student/:course/course', studentController.getByCourseId);
     router.get('/student/:student/student', studentController.getById);
+    router.post('/student/add', studentController.add);
 }

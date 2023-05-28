@@ -1,9 +1,9 @@
 const jwt = require("jsonwebtoken");
 const Student = require("../models/student.model");
+const Teacher = require("../models/teacher.model");
 
 exports.loginStudent = function (req, res) {
   Student.login(req.body, function (respone) {
-    console.log(respone.length);
     if (respone.length > 0) {
       var token = jwt.sign(
         {
@@ -24,8 +24,7 @@ exports.loginStudent = function (req, res) {
 };
 
 exports.loginTeacher = function (req, res) {
-  Student.login(req.body, function (respone) {
-    console.log(respone.length);
+  Teacher.login(req.body, function (respone) {
     if (respone.length > 0) {
       var token = jwt.sign(
         {
@@ -49,7 +48,6 @@ exports.loginTeacher = function (req, res) {
 
 exports.loginAdmin = function (req, res) {
   Student.login(req.body, function (respone) {
-    console.log(respone.length);
     if (respone.length > 0) {
       var token = jwt.sign(
         {

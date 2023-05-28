@@ -15,7 +15,7 @@ exports.getByProjectId = function (req, res) {
 
 exports.getByCourseId = function (req, res) {
     const courseId = req.params.course;
-    Student.getByProjectId(courseId ,(result)=>{
+    Student.getByCourseId(courseId ,(result)=>{
         res.send(result);
     })
 }
@@ -23,6 +23,13 @@ exports.getByCourseId = function (req, res) {
 exports.getById = function (req, res) {
     const studentId = req.params.student;
     Student.getById(studentId ,(result)=>{
+        res.send(result);
+    })
+}
+
+exports.add = function (req, res) {
+    const data = req.body;
+    Student.add(data ,(result)=>{
         res.send(result);
     })
 }

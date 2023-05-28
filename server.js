@@ -38,6 +38,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 require("./routers/home.router")(app);
 
 require("./routers/student.router")(app);
+require("./routers/teach.router")(app);
+require("./routers/evalutionboarch.router")(app);
+require("./routers/project.router")(app);
+
 
 
 app.get("/getuser",auth.checkLogin, function (req, res) {
