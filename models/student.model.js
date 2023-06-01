@@ -80,9 +80,22 @@ Student.returnById = function (id) {
 
 Student.getByProjectId = async function (id, result) {
   try {
+    // const data = await new Promise((resolve, reject) => {
+    //   db.query(
+    //     `SELECT studentid FROM studentinproject WHERE projectid = ${id}`,
+    //     function (err, data) {
+    //       if (err) {
+    //         reject(err);
+    //       } else {
+    //         resolve(data);
+    //       }
+    //     }
+    //   );
+    // });
+
     const data = await new Promise((resolve, reject) => {
       db.query(
-        `SELECT studentid FROM studentinproject WHERE projectid = ${id}`,
+        `select studentinproject.id AS stdinprjId,StudentId,CODE, student.Name, student.BirthDay, student.Address from student, studentinproject where student.Id = studentinproject.StudentId AND studentinproject.ProjectId = ${id}`,
         function (err, data) {
           if (err) {
             reject(err);
@@ -93,14 +106,12 @@ Student.getByProjectId = async function (id, result) {
       );
     });
 
-    const dataStudent = [];
+    // for (let i = 0; i < data.length; i++) {
+    //   const student = await Student.returnById(data[i].studentid);
+    //   dataStudent.push(student);
+    // }
 
-    for (let i = 0; i < data.length; i++) {
-      const student = await Student.returnById(data[i].studentid);
-      dataStudent.push(student);
-    }
-
-    result(dataStudent);
+    result(data);
   } catch (error) {
     console.log(error);
   }
@@ -118,28 +129,36 @@ Student.getByCourseId = async function (id, result) {
         }
       });
     });
-    result(data)
+    result(data);
   } catch (error) {
     result(error);
   }
 };
 
 Student.add = function (data, result) {
-    try {
-      db.query(
-        `INSERT INTO student (code, name, birthday, address, username, password, role) VALUES(?,?,?,?,?,?,?)`,
-        [data.code, data.name, data.birthday, data.address, data.username, data.password, data.role],
-        function (err, data) {
-          if (err) {
-            result(err);
-          } else {
-            result(data);
-          }
+  try {
+    db.query(
+      `INSERT INTO student (code, name, birthday, address, username, password, role) VALUES(?,?,?,?,?,?,"std")`,
+      [
+        data.code,
+        data.name,
+        data.birthday,
+        data.address,
+        data.username,
+        data.password,
+        data.role,
+      ],
+      function (err, data) {
+        if (err) {
+          result(err);
+        } else {
+          result(data);
         }
-      )
-    } catch (error) {
-        result(error);
-    };
-}
+      }
+    );
+  } catch (error) {
+    result(error);
+  }
+};
 
 module.exports = Student;

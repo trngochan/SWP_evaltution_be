@@ -35,20 +35,23 @@ const EvulutionBroand = function (evulutionBroand) {
 
   EvulutionBroand.getByTeacherId = async function(id ,cb) {
     try {
+      // const query ="SELECT * FROM lectureinboard, eveluationboard WHERE lectureinboard.Lecture_id = 1 AND lectureinboard.EvaluationBoardId = eveluationboard.Id;"
       const data = await new Promise((resolve, reject) => {
-        db.query(`select EvaluationBoardId from lectureinboard  where Lecture_id = ${id}`, function(err,data) {
+        db.query(`SELECT lectureinboard.Id as lectureinboardID,eveluationboard.Id, Name, SemesterId, SubjectId, TemplateId, StartTime,EndTime,Room FROM lectureinboard, eveluationboard WHERE lectureinboard.Lecture_id = ${id} AND lectureinboard.EvaluationBoardId = eveluationboard.Id`,
+         function(err,data) {
           if (err) reject(err);
           else resolve(data);
         })
       })
+      cb(data)
 
-      const dataEvulitionBoard = [];
-      for (let i = 0; i < data.length; i++) {
-        const evalution = await EvulutionBroand.returnById(data[i].EvaluationBoardId);
-        dataEvulitionBoard.push(evalution);
-      }
+    //   const dataEvulitionBoard = [];
+    //   for (let i = 0; i < data.length; i++) {
+    //     const evalution = await EvulutionBroand.returnById(data[i].EvaluationBoardId);
+    //     dataEvulitionBoard.push(evalution);
+    //   }
 
-      cb(dataEvulitionBoard)
+    //   cb(dataEvulitionBoard)
     } catch (error) {
         cb(error);
     }

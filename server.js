@@ -41,6 +41,8 @@ require("./routers/student.router")(app);
 require("./routers/teach.router")(app);
 require("./routers/evalutionboarch.router")(app);
 require("./routers/project.router")(app);
+require("./routers/scoreColumn.router")(app);
+require("./routers/score.router")(app);
 
 
 
