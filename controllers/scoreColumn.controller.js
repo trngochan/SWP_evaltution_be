@@ -6,3 +6,10 @@ exports.getByTemplateId = function (req, res) {
         res.send(result);
     })
 }
+
+exports.getBySubjectId = function (req, res) {
+    const id = req.params.subject;
+    scoreColumn.getBySubjectId(id,(result)=>{
+        res.send(result);
+    })
+}

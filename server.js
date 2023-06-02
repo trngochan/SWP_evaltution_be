@@ -43,6 +43,7 @@ require("./routers/evalutionboarch.router")(app);
 require("./routers/project.router")(app);
 require("./routers/scoreColumn.router")(app);
 require("./routers/score.router")(app);
+require("./routers/course.router")(app);
 
 
 

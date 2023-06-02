@@ -3,4 +3,5 @@ module.exports= function(router) {
 
     router.get('/project/getall', projectController.getAll);
     router.get('/project/:evalution/evalution', projectController.getByEvalutionId);
+    router.get('/project/:course/course', projectController.getIDStdInCourseByCourseIdAndStdId);
 }

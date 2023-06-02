@@ -57,4 +57,19 @@ const EvulutionBroand = function (evulutionBroand) {
     }
   }
 
+  EvulutionBroand.getByStdIdAndCourId = function (courId,stdId) {
+    return new Promise((resolve, reject) => {
+      db.query(
+        `select projectinboard.EvaluationBoardId from (select listPrjInStd.projectId from (select project.id as projectId from course,project WHERE course.id = ${courId} and course.Id = project.CourseId) as listPrjInCour,	(select studentinproject.ProjectId from student,studentinproject WHERE student.Id = ${stdId} AND studentinproject.StudentId = student.id) as listPrjInStd where listPrjInCour.projectId = listPrjInStd.ProjectId) as project,projectinboard where project.projectId = projectinboard.ProjectId`,
+        function (err, data) {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(data[0]);
+          }
+        }
+      );
+    });
+  };
+
   module.exports = EvulutionBroand;

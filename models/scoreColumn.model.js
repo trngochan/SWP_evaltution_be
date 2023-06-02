@@ -24,4 +24,22 @@ scoreColumn.getByTemplateId = function (id, cb) {
   }
 };
 
+scoreColumn.getBySubjectId = function (id, cb) {
+  try {
+    db.query(
+      "select * from template,scorecolumn WHERE template.SubjectId = ? AND scorecolumn.TemplateId = template.id;",
+      [id],
+      function (err, data) {
+        if (err) {
+          cb(err);
+        } else {
+          cb(data);
+        }
+      }
+    );
+  } catch (error) {
+    cb(error);
+  }
+};
+
 module.exports = scoreColumn;

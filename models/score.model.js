@@ -31,4 +31,17 @@ Score.insertScore = function (dataScores, data, cb) {
   }
 };
 
+Score.getScore = function (id,cb) {
+  try {
+    const idStdiInPrj = id[0].id
+    console.log(idStdiInPrj)
+    db.query(`SELECT * from score where StudentInProjectId = ${idStdiInPrj}`, (err, result) => {
+      if (err) cb(err);
+       cb(result);
+    })
+  } catch (error) {
+    cb(error);
+  }
+}
+
 module.exports = Score;

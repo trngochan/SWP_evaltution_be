@@ -19,3 +19,11 @@ exports.getByEvalutionId =  function (req, res) {
         res.send(result);
     })
 }
+
+exports.getIDStdInCourseByCourseIdAndStdId =  function (req, res) {
+    const courseId = req.params.course;
+    const studentId = req.cookies.user.id;
+    Project.getIDStdInCourseByCourseIdAndStdId(courseId,studentId, (result)=>{
+        res.send(result);
+    })
+}
