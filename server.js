@@ -44,6 +44,8 @@ require("./routers/project.router")(app);
 require("./routers/scoreColumn.router")(app);
 require("./routers/score.router")(app);
 require("./routers/course.router")(app);
+require("./routers/semester.router")(app);
+require("./routers/subject.router")(app);
 
 
 

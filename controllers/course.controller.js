@@ -6,3 +6,17 @@ exports.getByStudentID = function (req, res) {
         res.send(result)
     })
 }
+
+exports.getByTeacherID = function (req, res) { 
+    const teacherId = req.params.teacher; 
+    Course.getByTeacherID(teacherId, (result) => {
+        res.send(result)
+    })
+}
+
+exports.add = function (req, res) { 
+    const data = req.body; 
+    Course.add(data, (result) => {
+        res.send(result)
+    })
+}

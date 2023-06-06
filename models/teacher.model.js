@@ -11,7 +11,7 @@ Teacher.login = function (data, result) {
   const param = [data.username, data.password];
   try {
     db.query(
-      "SELECT username, role, id from lecture where username = ? && password = ?",
+      "SELECT username, role, id, name from lecture where username = ? && password = ?",
       param,
       function (err, data) {
         if (err) {
@@ -27,7 +27,7 @@ Teacher.login = function (data, result) {
 };
 
 Teacher.getAll = function(cb) { 
-    db.query("SELECT name, birthday, phonenumber, address FROM lecture", function (err, data) {
+    db.query("SELECT id,name, birthday, phonenumber, address FROM lecture", function (err, data) {
         if (err) {
             cb(err)
         } else {
