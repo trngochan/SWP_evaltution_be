@@ -1,6 +1,10 @@
-module.exports= function(router) {
-    const scoreController = require('../controllers/score.controller');
+module.exports = function (router) {
+  const scoreController = require("../controllers/score.controller");
 
-    router.post('/score/insert', scoreController.insertScore);
-    router.get('/score/:course/course', scoreController.getScore);
-}
+  router.post("/score/insert", scoreController.insertScore);
+  router.post("/score/get", scoreController.getScore);
+  router.get(
+    "/score/:stdinprj/calAvgScore",
+    scoreController.calAvgScoreBystdInPrj
+  );
+};

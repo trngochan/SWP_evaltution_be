@@ -20,3 +20,9 @@ exports.add = function (req, res) {
         res.send(result)
     })
 }
+
+exports.getAll = function (req, res) { 
+    Course.getAll((result) => {
+        res.send(result)
+    })
+}

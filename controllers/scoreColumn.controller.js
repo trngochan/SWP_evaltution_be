@@ -13,3 +13,10 @@ exports.getBySubjectId = function (req, res) {
         res.send(result);
     })
 }
+
+exports.add = function (req, res) {
+    const data = req.body;
+    scoreColumn.add(data,(result)=>{
+        res.send(result);
+    })
+}

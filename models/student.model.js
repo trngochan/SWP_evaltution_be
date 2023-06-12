@@ -15,10 +15,17 @@ Student.login = function (data, result) {
       function (err, data) {
         if (err) {
           result(err);
-        } else if (data.length == 0) {
-          result(data);
         } else {
-          result(data);
+          if (data.length > 0)
+            result({
+              status: 200,
+              data,
+            });
+          else
+            result({
+              status: 401,
+              message: "Invalid username or password",
+            });
         }
       }
     );
@@ -33,11 +40,9 @@ Student.getAll = function (result) {
       "SELECT code, name, birthday, address  from student ",
       function (err, data) {
         if (err) {
-          result(err);
-        } else if (data.length == 0) {
-          result(data);
+          return result(err);
         } else {
-          result(data);
+          return result(data);
         }
       }
     );
@@ -135,29 +140,68 @@ Student.getByCourseId = async function (id, result) {
   }
 };
 
-Student.add = function (data, result) {
-  try {
-    db.query(
-      `INSERT INTO student (code, name, birthday, address, username, password, role) VALUES(?,?,?,?,?,?,"std")`,
-      [
-        data.code,
-        data.name,
-        data.birthday,
-        data.address,
-        data.username,
-        data.password,
-        data.role,
-      ],
-      function (err, data) {
-        if (err) {
-          result(err);
-        } else {
-          result(data);
-        }
+Student.checkDoubleUser = (username) => {
+  return new Promise((resolve, reject) => {
+    const query = "SELECT * FROM Student WHERE username = ?";
+    db.query(query, [username], (error, results) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
       }
-    );
+    });
+  });
+};
+
+Student.checkDoubleCode = (code) => {
+  return new Promise((resolve, reject) => {
+    const query = "SELECT * FROM Student WHERE code = ?";
+    db.query(query, [code], (error, results) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+};
+
+Student.add = async function (data, result) {
+  try {
+    // Truy vấn để kiểm tra trùng lặp người dùng
+    const duplicateUsers = await Student.checkDoubleUser(data.username);
+    const duplicateCode = await Student.checkDoubleCode(data.code);
+
+    if (duplicateUsers.length > 0) {
+      return result({ status: 401, message: "Duplicate username" });
+    }
+    if (duplicateCode.length > 0) {
+      return result({ status: 401, message: "Duplicate code" });
+    } else {
+      // Tiếp tục thực hiện truy vấn thêm sinh viên vào cơ sở dữ liệu
+      const insertQuery = `INSERT INTO student (code, name, birthday, address, username, password, role) VALUES (?, ?, ?, ?, ?, ?, "std")`;
+      db.query(
+        insertQuery,
+        [
+          data.code,
+          data.name,
+          data.birthday,
+          data.address,
+          data.username,
+          data.password,
+        ],
+        (error, insertResult) => {
+          if (error) {
+            return result({ status: 500, message: "Failed to insert student" });
+          } else {
+            return result({ status: 200, message: "Insert student success" });
+          }
+        }
+      );
+    }
   } catch (error) {
-    result(error);
+    console.log(error);
+    return result({ status: 500, message: "Internal server error" });
   }
 };
 

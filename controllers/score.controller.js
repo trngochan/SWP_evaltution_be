@@ -14,15 +14,22 @@ exports.insertScore = function (req, res) {
   });
 };
 
+exports.calAvgScoreBystdInPrj = function (req, res) {
+  const stdinprj = req.params.stdinprj;
+  Score.calAvgScoreBystdInPrj(stdinprj, (result) => {
+    res.send(result);
+  });
+};
+
 // exports.getScore = async function (req, res) {
 //     try {
 //       const userCookie = req.cookies.user;
 //       const userObject = JSON.parse(userCookie);
 //       const studentId = userObject.id;
 //       const courseId = req.params.course;
-    
+
 //       const studentinproject = await Project.getIDStdInCourseByCourseIdAndStdId(courseId, studentId);
-    
+
 //       console.log(studentinproject);
 //       // Score.getScore(studentinproject, (result) => {
 //       //   res.send(result);
@@ -32,17 +39,12 @@ exports.insertScore = function (req, res) {
 //       // Xử lý lỗi
 //     }
 //   };
-  
-  exports.getScore = async function (req, res) {
+
+exports.getScore = async function (req, res) {
   try {
-    const userCookie = req.cookies.user;
-    const userObject = JSON.parse(userCookie);
-    const studentId = userObject.id;
-    const courseId = req.params.course;
-  
-    const studentinproject = await Project.getIDStdInCourseByCourseIdAndStdId(courseId, studentId);
-  
-    Score.getScore(studentinproject, (result) => {
+    const { id, courseId } = req.body;
+
+    Score.getScore(id, courseId, (result) => {
       res.send(result);
     });
   } catch (err) {

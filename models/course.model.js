@@ -53,12 +53,22 @@ Course.add = function (data, cb) {
     db.query(
       `insert into course (subjectId, semesterId, LectureId, name) values (${subjectId},${semesterId},${LectureId},"${name}")`,
       function (err, data) {
-        if (err) return cb(err);
-        return cb(data);
+        if (err)
+          return cb({
+            status: 401,
+            message: "Insert failed",
+          });
+        return cb({
+          status: 200,
+          message: "Insert succeeded",
+        });
       }
     );
   } catch (error) {
-    cb(error);
+    return cb({
+      status: 401,
+      message: "Error inserting",
+    });
   }
 };
 module.exports = Course;

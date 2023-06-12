@@ -7,7 +7,7 @@ exports.getAll = function(req, res) {
 }
 
 exports.add = function(req, res) {
-    const data = req.data;
+    const data = req.body;
     semester.add( data,(result) => {
         res.send(result);
     });

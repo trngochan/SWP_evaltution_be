@@ -20,8 +20,9 @@ semester.getAll = function (cb) {
 };
 
 semester.add = function (data ,cb) {
+  const data1 = [data.year, data.session, new Date(data.startTime).toISOString().split('T')[0], new Date(data.endTime).toISOString().split('T')[0]]
   try {
-    db.query("insert into semester values (?, ?, ? ? ,?)",data, function (err, results) {
+    db.query("INSERT INTO `semester` (`Id`, `Year`, `Session`, `StartTime`, `EndTime`) values (null,?, ?, ?,?)",data1, function (err, results) {
       if (err) return cb(err);
       return cb(results);
     });
