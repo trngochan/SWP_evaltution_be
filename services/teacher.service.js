@@ -174,4 +174,30 @@ Teacher.getNotIntBoard = async function (id, cb) {
   );
 };
 
+Teacher.editTeacher = function (data, cb) {
+  try {
+    db.query(
+      "UPDATE `lecture` SET `Name`= ? ,`BirthDay`= ?,`PhoneNumber`= ?,`Address`= ? WHERE Id = ? ",
+      [data.name, data.birthday, data.phonenumber, data.address, data.id],
+      function (err, results) {
+        if (err) {
+          return cb({
+            status: 401,
+            message: "Update not allowed",
+          });
+        }
+        return cb({
+          status: 200,
+          message: "Updated successfully",
+        });
+      }
+    );
+  } catch (error) {
+    return cb({
+      status: 401,
+      massage: "Error edit teacher",
+    });
+  }
+};
+
 module.exports = Teacher;

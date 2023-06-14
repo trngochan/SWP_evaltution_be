@@ -5,8 +5,6 @@ const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const auth = require("./common/_AUTH");
 
-const he = "helo";
-
 app.use(cookieParser());
 
 // app.set('trust proxy', 1)
@@ -51,6 +49,8 @@ require("./routers/template.router")(app);
 
 require("./routers/lectureinboard.router")(app);
 require("./routers/projectinboard.router")(app);
+require("./routers/studentincourse.router")(app);
+require("./routers/studentinproject.router")(app);
 
 app.get("/getuser", auth.checkLogin, function (req, res) {
   console.log("check login");

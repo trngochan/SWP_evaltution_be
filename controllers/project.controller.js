@@ -52,3 +52,10 @@ exports.calAvareScore = async function (req, res) {
     });
   }
 };
+
+exports.getByCourse = function (req, res) {
+  const course = req.params.course;
+  Project.getByCourseId(course, (result) => {
+    res.send(result);
+  });
+};

@@ -17,7 +17,7 @@ module.exports = function (router) {
   );
   router.post("/teacher/add", teacherController.add);
   router.get("/teacher/:board/notinboard", teacherController.getNotIntBoard);
-  // router.get('/student/:project/project', teacherController.getByProjectId);
-  // router.get('/student/:course/course', teacherController.getByCourseId);
-  // router.get('/student/:student/student', teacherController.getById);
+  router.delete("/teacher/:teacher/delete", teacherController.deleteTeacher);
+  router.put("/teacher/edit", teacherController.editTeacher);
+  router.post("/teacher/add", teacherController.add);
 };

@@ -15,7 +15,7 @@ exports.add = function (req, res) {
 
 exports.getByLectureInBoard = function (req, res) {
   const id = req.params.lectureInBoard;
-  Teacher.getAll(id, (result) => {
+  Teacher.getByLectureInBoard(id, (result) => {
     res.send(result);
   });
 };
@@ -39,4 +39,14 @@ exports.getQuanMarkedOfBoarnd = function (req, res) {
 exports.getNotIntBoard = function (req, res) {
   const board = req.params.board;
   Teacher.getNotIntBoard(board, (result) => res.send(result));
+};
+
+exports.deleteTeacher = function (req, res) {
+  const teacher = req.params.teacher;
+  Teacher.deleteTeacher(teacher, (result) => res.seng(result));
+};
+
+exports.editTeacher = function (req, res) {
+  const data = req.body;
+  Teacher.editTeacher(data, (result) => res.send(result));
 };

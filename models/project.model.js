@@ -10,8 +10,9 @@ Project.add = function (data, cb) {
   try {
     db.query(
       "INSERT INTO `project`(`Name`, `Notion`, `courseId`) VALUES (?, ?, ?)",
-      [data.name, data.notion, data.cousreId],
+      [data.name, data.notion, data.courseId],
       (err, result) => {
+        console.log(err);
         if (err)
           return cb({
             status: 401,

@@ -192,7 +192,7 @@ Student.add = async function (data, result) {
         ],
         (error, insertResult) => {
           if (error) {
-            return result({ status: 500, message: "Failed to insert student" });
+            return result({ status: 401, message: "Failed to insert student" });
           } else {
             return result({ status: 200, message: "Insert student success" });
           }
@@ -202,6 +202,63 @@ Student.add = async function (data, result) {
   } catch (error) {
     console.log(error);
     return result({ status: 500, message: "Internal server error" });
+  }
+};
+
+Student.getStdInCourNotInProject = async (project, course, cb) => {
+  try {
+    db.query(
+      "select student.Id, student.Name, student.Code, student.Address from student, studentincourse WHERE student.Id = studentincourse.StudentId AND studentincourse.CourseId = ? AND student.Id NOT IN (SELECT student.Id from student, studentinproject WHERE student.Id = studentinproject.StudentId and studentinproject.ProjectId = ?)",
+      [course, project],
+      (error, Result) => {
+        if (error) {
+          return cb({ status: 401, message: "Failed to get student" });
+        } else {
+          return cb({ status: 200, data: Result });
+        }
+      }
+    );
+  } catch (error) {
+    console.log(error);
+    return cb({ status: 500, message: "Error at getStdNotInProject" });
+  }
+};
+
+Student.getStdNotInCour = async (course, cb) => {
+  try {
+    db.query(
+      "SELECT * from student WHERE student.Id NOT IN (SELECT studentincourse.StudentId from studentincourse, (SELECT course.id as CourseId FROM course, (SELECT course.SemesterId, course.SubjectId from course WHERE course.id = ?) AS S WHERE course.SemesterId = S.SemesterId AND course.SubjectId = S.SubjectId) as L WHERE studentincourse.CourseId = L.CourseId)",
+      [course],
+      (error, Result) => {
+        if (error) {
+          return cb({ status: 401, message: "Failed to get student" });
+        } else {
+          return cb({ status: 200, data: Result });
+        }
+      }
+    );
+  } catch (error) {
+    console.log(error);
+    return cb({ status: 500, message: "Error at getStdNotInProject" });
+  }
+};
+
+Student.getStdNotInPrj = function (project, cb) {
+  try {
+    db.query(
+      "SELECT * from student, (SELECT studentincourse.StudentId from studentincourse, (select project.CourseId from project WHERE project.Id = ?) as stinprj WHERE studentincourse.CourseId = stinprj.CourseId AND studentincourse.StudentId NOT IN (SELECT studentinproject.StudentId from student, studentinproject WHERE student.Id = studentinproject.StudentId AND studentinproject.ProjectId = ?)) as stds WHERE student.Id = stds.StudentId",
+      [project, project],
+      (error, Result) => {
+        if (error) {
+          return cb({ status: 401, message: "Failed to get student" });
+        } else {
+          return cb({ status: 200, data: Result });
+        }
+      }
+    );
+  } catch (error) {
+    console.log(error);
+    return cb({ status: 500, message: "Error at getStdNotInProject" });
   }
 };
 

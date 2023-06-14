@@ -10,6 +10,10 @@ module.exports = function (router) {
     "/project/:course/course",
     projectController.getIDStdInCourseByCourseIdAndStdId
   );
+  router.get(
+    "/project/:course/projectincourses",
+    projectController.getByCourse
+  );
   router.post("/project/add", projectController.add);
   router.post("/project/:project/public", projectController.calAvareScore);
   router.get(
