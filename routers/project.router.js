@@ -1,7 +1,10 @@
+const auth = require("../common/_AUTH");
+
 module.exports = function (router) {
   const projectController = require("../controllers/project.controller");
 
   router.get("/project/getall", projectController.getAll);
+  router.get("/project/:project/getbyid", projectController.getById);
   router.get(
     "/project/:evalution/evalution",
     projectController.getByEvalutionId

@@ -16,6 +16,19 @@ Subject.getAll = function (cb) {
   });
 };
 
+Subject.getById = function (id, cb) {
+  try {
+    db.query(
+      "select * from subject where id = ?",
+      [id],
+      function (err, result) {
+        if (err) return cb(err);
+        return cb(result);
+      }
+    );
+  } catch (error) {}
+};
+
 Subject.add = function (data, cb) {
   try {
     db.query(

@@ -7,6 +7,34 @@ const Course = function (course) {
   this.LectureId = course.LectureId;
 };
 
+Course.getBySubject = function (id, cb) {
+  try {
+    db.query(
+      "select * from Course where SubjectId = ?",
+      [id],
+      function (err, result) {
+        if (err) {
+          return cb(err);
+        }
+        return cb(result);
+      }
+    );
+  } catch (error) {}
+};
+
+Course.getByID = function (id, cb) {
+  try {
+    db.query("select * from course where id = ?", [id], function (err, result) {
+      if (err) {
+        return cb(err);
+      }
+      return cb(result);
+    });
+  } catch (error) {
+    cb(error);
+  }
+};
+
 Course.getAll = function (cb) {
   try {
     db.query("SELECT * FROM Course", function (err, data) {

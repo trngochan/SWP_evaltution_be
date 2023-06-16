@@ -1,3 +1,5 @@
+const auth = require("../common/_AUTH");
+
 module.exports = function (router) {
   const teacherController = require("../controllers/teacher.controller");
 

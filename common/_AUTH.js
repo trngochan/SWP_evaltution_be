@@ -1,4 +1,4 @@
-var jwt = require('jsonwebtoken');
+var jwt = require("jsonwebtoken");
 
 const checkLogin = (req, res, next) => {
   try {
@@ -11,7 +11,8 @@ const checkLogin = (req, res, next) => {
       next();
     }
   } catch (error) {
-    res.status(401).json({
+    res.json({
+      status: 401,
       message: "Token khong hop le",
     });
   }
@@ -19,12 +20,12 @@ const checkLogin = (req, res, next) => {
 
 const checkStudent = (req, res, next) => {
   try {
-
-    if (req.params.data.role == 'std') {
+    if (req.params.data.role == "std") {
       next();
     }
   } catch (error) {
     res.status(401).json({
+      status: 401,
       message: "Token khong hop le",
     });
   }
@@ -32,12 +33,12 @@ const checkStudent = (req, res, next) => {
 
 const checkTeacher = (req, res, next) => {
   try {
-
-    if (req.params.data.role == 'teach') {
+    if (req.params.data.role == "teach") {
       next();
     }
   } catch (error) {
     res.status(401).json({
+      status: 401,
       message: "Token khong hop le",
     });
   }
@@ -45,12 +46,12 @@ const checkTeacher = (req, res, next) => {
 
 const checkAdmin = (req, res, next) => {
   try {
-
-    if (req.params.data.role == 'admin') {
+    if (req.params.data.role == "admin") {
       next();
     }
   } catch (error) {
     res.status(401).json({
+      status: 401,
       message: "Token khong hop le",
     });
   }
@@ -60,5 +61,5 @@ module.exports = {
   checkLogin,
   checkAdmin,
   checkTeacher,
-  checkStudent
+  checkStudent,
 };

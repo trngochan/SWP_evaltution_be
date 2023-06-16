@@ -2,14 +2,18 @@ const Project = require("../models/project.model");
 const Score = require("../models/score.model");
 
 exports.insertScore = function (req, res) {
-  const dataScores = req.body;
-  const data = [
-    req.cookies.course_id,
-    dataScores.stdinprjId,
-    req.cookies.lectureinboard_id,
+  const data = req.body;
+  const dataInfor = [
+    data.courseID,
+    data.score.stdinprjId,
+    data.lectureinboardId,
   ];
-  delete dataScores.stdinprjId;
-  Score.insertScore(dataScores, data, (result) => {
+
+  delete data.lectureinboardId;
+  delete data.courseID;
+  delete data.score.stdinprjId;
+
+  Score.insertScore(dataInfor, data.score, (result) => {
     res.send(result);
   });
 };

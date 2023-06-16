@@ -12,3 +12,10 @@ exports.add = function (req, res) {
     res.send(result);
   });
 };
+
+exports.getById = function (req, res) {
+  const subject = req.params.subject;
+  Subject.getById(subject, (result) => {
+    res.send(result);
+  });
+};

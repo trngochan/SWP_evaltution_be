@@ -9,10 +9,10 @@ const Score = function (Score) {
     (this.score = Score.score);
 };
 
-Score.insertScore = function (dataScores, data, cb) {
+Score.insertScore = function (dataInfor, dataScores, cb) {
   try {
     for (let key in dataScores) {
-      let dataMake = [...data];
+      let dataMake = [...dataInfor];
       dataMake[dataMake.length] = key;
       dataMake[dataMake.length] = dataScores[key];
       db.query(
@@ -20,12 +20,12 @@ Score.insertScore = function (dataScores, data, cb) {
         dataMake,
         (err, result) => {
           if (err) {
-            cb(err);
+            return cb(err);
           }
         }
       );
     }
-    cb("thanh cong");
+    return cb("thanh cong");
   } catch (error) {
     cb(error);
   }
