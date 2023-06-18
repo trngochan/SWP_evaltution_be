@@ -23,4 +23,5 @@ module.exports = function (router) {
     "/project/:board/projectsnoboard",
     projectController.getProjectNoHasBoard
   );
+  router.put("/project/edit", projectController.update);
 };

@@ -6,6 +6,32 @@ const Project = function (project) {
     (this.notion = project.notion);
 };
 
+Project.update = function (data, cb) {
+  try {
+    db.query(
+      "UPDATE `project` SET `Name`= ? ,`Notion`=? WHERE Id = ?",
+      [data.name, data.notion, data.id],
+      (err, result) => {
+        console.log(err);
+        if (err)
+          return cb({
+            status: 401,
+            message: "Insert failed",
+          });
+        return cb({
+          status: 200,
+          message: "Success",
+        });
+      }
+    );
+  } catch (error) {
+    cb({
+      status: 500,
+      message: "Internal error in project update",
+    });
+  }
+};
+
 Project.add = function (data, cb) {
   try {
     db.query(

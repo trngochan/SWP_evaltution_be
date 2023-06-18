@@ -34,6 +34,13 @@ exports.add = function (req, res) {
   });
 };
 
+exports.update = function (req, res) {
+  const data = req.body;
+  Student.update(data, (result) => {
+    res.send(result);
+  });
+};
+
 exports.getStdInCourNotInProject = function (req, res) {
   const project = req.params.project;
   const course = req.params.course;

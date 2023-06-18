@@ -15,4 +15,5 @@ module.exports = function (router) {
     "/student/:course/getstdnotincour",
     studentController.getStdNotInCour
   );
+  router.put("/student/edit", studentController.update);
 };

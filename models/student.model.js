@@ -34,10 +34,28 @@ Student.login = function (data, result) {
   }
 };
 
+Student.update = function (data, cb) {
+  try {
+    db.query(
+      "UPDATE `student` SET`Name`= ?,`BirthDay`=?,`Address`=?  WHERE id = ?",
+      [data.name, data.birthday, data.address, data.id],
+      function (err, result) {
+        if (err) return cb({ status: 400, message: "Update failed" });
+        return cb({ status: 200, message: "Update successful" });
+      }
+    );
+  } catch (error) {
+    cb({
+      status: 500,
+      message: "Internal Server Error",
+    });
+  }
+};
+
 Student.getAll = function (result) {
   try {
     db.query(
-      "SELECT code, name, birthday, address  from student ",
+      "SELECT id,code, name, birthday, address  from student ",
       function (err, data) {
         if (err) {
           return result(err);

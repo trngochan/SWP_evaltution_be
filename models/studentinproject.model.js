@@ -23,4 +23,22 @@ StudentInProject.add = function (data, cb) {
   );
 };
 
+StudentInProject.remove = function (id, cb) {
+  db.query(
+    "DELETE FROM `studentinproject` WHERE Id = ?",
+    [id],
+    function (err, result) {
+      if (err)
+        return cb({
+          status: 400,
+          message: "Error deleting project",
+        });
+      return cb({
+        status: 200,
+        message: "Delete successfully",
+      });
+    }
+  );
+};
+
 module.exports = StudentInProject;

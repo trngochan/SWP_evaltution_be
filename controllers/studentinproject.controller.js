@@ -6,3 +6,10 @@ exports.add = function (req, res) {
     res.send(result);
   });
 };
+
+exports.remove = function (req, res) {
+  const stdinprj = req.params.stdinprj;
+  StudentInProject.remove(stdinprj, (result) => {
+    res.send(result);
+  });
+};

@@ -15,6 +15,13 @@ exports.add = function (req, res) {
   });
 };
 
+exports.update = function (req, res) {
+  const data = req.body;
+  Project.update(data, (result) => {
+    res.send(result);
+  });
+};
+
 exports.getProjectNoHasBoard = async function (req, res) {
   const board = req.params.board;
   const data = await Project.getProjectNoHasBoard(board);
