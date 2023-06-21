@@ -226,8 +226,8 @@ Student.add = async function (data, result) {
 Student.getStdInCourNotInProject = async (project, course, cb) => {
   try {
     db.query(
-      "select student.Id, student.Name, student.Code, student.Address from student, studentincourse WHERE student.Id = studentincourse.StudentId AND studentincourse.CourseId = ? AND student.Id NOT IN (SELECT student.Id from student, studentinproject WHERE student.Id = studentinproject.StudentId and studentinproject.ProjectId = ?)",
-      [course, project],
+      "SELECT * FROM student,studentincourse WHERE student.Id = studentincourse.StudentId AND studentincourse.CourseId = ? AND student.Id NOT IN (SELECT studentinproject.Id from course, project, studentinproject WHERE course.id = project.CourseId AND course.id = ? AND project.Id = studentinproject.ProjectId)",
+      [course, course],
       (error, Result) => {
         if (error) {
           return cb({ status: 401, message: "Failed to get student" });

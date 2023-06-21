@@ -8,7 +8,7 @@ module.exports = function (router) {
   router.post("/student/add", studentController.add);
   router.get("/student/:project/getstdinprj", studentController.getStdNotInPrj);
   router.get(
-    "/student/:project/:course/getstdnotinproject",
+    "/student/:course/getstdnotinproject",
     studentController.getStdInCourNotInProject
   );
   router.get(
