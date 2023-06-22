@@ -24,4 +24,8 @@ module.exports = function (router) {
     projectController.getProjectNoHasBoard
   );
   router.put("/project/edit", projectController.update);
+  router.get(
+    "/project/:lectureinboard/getprojectmarked",
+    projectController.getProjectMarked
+  );
 };

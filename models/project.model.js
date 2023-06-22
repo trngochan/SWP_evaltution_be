@@ -32,6 +32,31 @@ Project.update = function (data, cb) {
   }
 };
 
+Project.getProjectMarked = function (id, cb) {
+  try {
+    db.query(
+      "SELECT DISTINCT studentinproject.ProjectId from studentinproject, (SELECT DISTINCT Score.StudentInProjectId FROM `score` WHERE LectureInBoardId = ?) AS listStd WHERE studentinproject.Id = listStd.StudentInProjectId",
+      [id],
+      (err, result) => {
+        if (err)
+          return cb({
+            status: 401,
+            message: "Error failed",
+          });
+        return cb({
+          status: 200,
+          result,
+        });
+      }
+    );
+  } catch (error) {
+    cb({
+      status: 500,
+      message: "Internal error in project update",
+    });
+  }
+};
+
 Project.add = function (data, cb) {
   try {
     db.query(
