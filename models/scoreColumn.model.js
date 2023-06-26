@@ -8,46 +8,45 @@ const scoreColumn = function (column) {
 
 scoreColumn.checkDoubleId = function (id) {
   return Promise(function (resolve, reject) {
-    db.query("SELECT * from scorecolumn WHERE id = ?", [id], function (err, res) {
-      if(err) reject(err);
-      else {
-        resolve(res);
+    db.query(
+      "SELECT * from scorecolumn WHERE id = ?",
+      [id],
+      function (err, res) {
+        if (err) reject(err);
+        else {
+          resolve(res);
+        }
       }
-    })
-  })
-}
+    );
+  });
+};
 
 scoreColumn.add = function (data, cb) {
   try {
-    const doubleId = scoreColumn.checkDoubleId(data.id);
-    if (doubleId.length > 0) {
-      return cb({
-        status: 401,
-        message: 'Double ID'
-      });
-    } else {
+    for (var i = 0; i < data.dataColumn.length; i++) {
       db.query(
-        "INSERT INTO `scorecolumn`(`Id`, `Name`, `Percent`, `TemplateId`) VALUES (?, ?, ? , ?)",
-        [data.id, data.name, data.percent, data.template],
+        "INSERT INTO `scorecolumn`( `Name`, `Percent`, `TemplateId`) VALUES ( ?, ? , ?)",
+        [data.dataColumn[i].name, data.dataColumn[i].percent, data.templateId],
         function (err, data) {
           if (err) {
+            console.log(err);
             return cb({
               status: 401,
-              message: "Failed to inser scoreColumn"
-            });
-          } else {
-            return cb({
-              status: 200,
-              message: "Insert successfully"
+              message: "Failed to inser scoreColumn",
             });
           }
         }
       );
     }
+    return cb({
+      status: 200,
+      message: "Insert successfully",
+    });
   } catch (error) {
-    cb({
+    console.log(error);
+    return cb({
       status: 500,
-      message: "Error at add scoreColimn"
+      message: "Error at add scoreColimn",
     });
   }
 };

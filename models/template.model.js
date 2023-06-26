@@ -17,7 +17,7 @@ Template.getAll = function (cb) {
 };
 
 Template.checkDoubleId = function (id) {
-  return Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const query = "select * from Template where id = ?";
     db.query(query, [id], (err, results) => {
       if (err) {
@@ -29,24 +29,26 @@ Template.checkDoubleId = function (id) {
   });
 };
 
-Template.add = function (data, cb) {
+Template.add = async function (data, cb) {
   try {
-    const duplicateId = Template.checkDoubleId(data.id);
+    const duplicateId = await Template.checkDoubleId(data.id);
     if (duplicateId.length > 0) {
       return cb({
         status: 401,
-        massage: "Duplicate code",
+        massage: "Duplicate ID Template",
       });
     } else {
       db.query(
         "INSERT INTO `template`(`Id`, `Name`, `SubjectId`, `Status`, `ApplyDate`) VALUES (?, ?, ?, ?, ?)",
-        [data.id, data.name, data.subjectId, 1, data.applyDate],
+        [data.id, data.name, data.subjectId, 1, data.applydate],
         function (err, results) {
-          if (err)
+          if (err) {
+            console.log(err);
             return cb({
               status: 401,
               data: "Failed to insert template",
             });
+          }
           return cb({
             status: 200,
             data: results,
@@ -55,8 +57,9 @@ Template.add = function (data, cb) {
       );
     }
   } catch (error) {
+    console.log(error);
     return cb({
-      status: 401,
+      status: 500,
       massage: "Error at tempalte add",
     });
   }
