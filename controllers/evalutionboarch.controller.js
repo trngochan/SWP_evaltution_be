@@ -6,6 +6,20 @@ exports.getAll = function (req, res) {
   });
 };
 
+exports.getByProjectId = function (req, res) {
+  const id = req.params.project;
+  Evalution.getByProjectId(id, (result) => {
+    res.send(result);
+  });
+};
+
+exports.getById = function (req, res) {
+  const id = req.params.board;
+  Evalution.getById(id, (result) => {
+    res.send(result);
+  });
+};
+
 exports.getByTeacherId = function (req, res) {
   const teacherId = req.params.teacher;
   Evalution.getByTeacherId(teacherId, (result) => {

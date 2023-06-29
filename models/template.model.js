@@ -10,15 +10,18 @@ const Template = function (template) {
 
 Template.getAll = function (cb) {
   try {
-    db.query("Select * from Template", function (err, results) {
-      cb(results);
-    });
+    db.query(
+      "Select * from Template where Status = 1",
+      function (err, results) {
+        cb(results);
+      }
+    );
   } catch (error) {}
 };
 
 Template.checkDoubleId = function (id) {
   return new Promise((resolve, reject) => {
-    const query = "select * from Template where id = ?";
+    const query = "select * from Template where id = ? and Status = 1";
     db.query(query, [id], (err, results) => {
       if (err) {
         reject(err);

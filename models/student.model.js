@@ -10,7 +10,7 @@ Student.login = function (data, result) {
   const param = [data.username, data.password];
   try {
     db.query(
-      "SELECT username, role, id, address  from student where username = ? && password = ?",
+      "SELECT username, role, id, address  from student where username = ? And password = ? and Status = 1",
       param,
       function (err, data) {
         if (err) {
@@ -55,7 +55,7 @@ Student.update = function (data, cb) {
 Student.getAll = function (result) {
   try {
     db.query(
-      "SELECT id,code, name, birthday, address  from student ",
+      "SELECT id,code, name, birthday, address  from student Where Status = 1",
       function (err, data) {
         if (err) {
           return result(err);
@@ -72,7 +72,7 @@ Student.getAll = function (result) {
 Student.getById = function (id, result) {
   try {
     db.query(
-      `SELECT code, name, birthday, address  from student where id = ${id}`,
+      `SELECT code, name, birthday, address  from student where id = ${id} and Status = 1`,
       function (err, data) {
         if (err) {
           result(err);
@@ -89,7 +89,7 @@ Student.getById = function (id, result) {
 Student.returnById = function (id) {
   return new Promise((resolve, reject) => {
     db.query(
-      `SELECT code, name, birthday, address FROM student WHERE id = ${id}`,
+      `SELECT code, name, birthday, address FROM student WHERE id = ${id} and Status = 1`,
       function (err, data) {
         if (err) {
           reject(err);
@@ -118,7 +118,7 @@ Student.getByProjectId = async function (id, result) {
 
     const data = await new Promise((resolve, reject) => {
       db.query(
-        `select studentinproject.id AS stdinprjId,StudentId,CODE, student.Name, student.BirthDay, student.Address from student, studentinproject where student.Id = studentinproject.StudentId AND studentinproject.ProjectId = ${id}`,
+        `select studentinproject.id AS stdinprjId,StudentId,CODE, student.Name, student.BirthDay, student.Address from student, studentinproject where student.Id = studentinproject.StudentId AND studentinproject.ProjectId = ${id} AND student.Status = 1 AND studentinproject.Status = 1`,
         function (err, data) {
           if (err) {
             reject(err);
@@ -143,7 +143,7 @@ Student.getByProjectId = async function (id, result) {
 Student.getByCourseId = async function (id, result) {
   try {
     const data = await new Promise((resolve, reject) => {
-      const quere = `SELECT code,name, birthday, address FROM student , studentincourse WHERE studentincourse.courseId = ${id} and student.Id = studentincourse.StudentId`;
+      const quere = `SELECT code,name, birthday, address FROM student , studentincourse WHERE studentincourse.courseId = ${id} and student.Id = studentincourse.StudentId  AND studentincourse.Status = 1 AND student.Status = 1`;
       db.query(quere, function (err, data) {
         if (err) {
           reject(err);
@@ -160,7 +160,7 @@ Student.getByCourseId = async function (id, result) {
 
 Student.checkDoubleUser = (username) => {
   return new Promise((resolve, reject) => {
-    const query = "SELECT * FROM Student WHERE username = ?";
+    const query = "SELECT * FROM Student WHERE username = ? and Status = 1";
     db.query(query, [username], (error, results) => {
       if (error) {
         reject(error);
@@ -173,7 +173,7 @@ Student.checkDoubleUser = (username) => {
 
 Student.checkDoubleCode = (code) => {
   return new Promise((resolve, reject) => {
-    const query = "SELECT * FROM Student WHERE code = ?";
+    const query = "SELECT * FROM Student WHERE code = ? and Status = 1";
     db.query(query, [code], (error, results) => {
       if (error) {
         reject(error);
@@ -223,10 +223,10 @@ Student.add = async function (data, result) {
   }
 };
 
-Student.getStdInCourNotInProject = async (project, course, cb) => {
+Student.getStdInCourNotInProject = async (course, cb) => {
   try {
     db.query(
-      "SELECT * FROM student,studentincourse WHERE student.Id = studentincourse.StudentId AND studentincourse.CourseId = ? AND student.Id NOT IN (SELECT studentinproject.Id from course, project, studentinproject WHERE course.id = project.CourseId AND course.id = ? AND project.Id = studentinproject.ProjectId)",
+      "SELECT * FROM student,studentincourse WHERE student.Status = 1 AND studentincourse.Status = 1 AND student.Id = studentincourse.StudentId AND studentincourse.CourseId = ? AND student.Id NOT IN (SELECT studentinproject.StudentId from course, project, studentinproject WHERE course.id = project.CourseId AND course.id = ? AND project.Id = studentinproject.ProjectId AND course.Status = 1 AND project.Status = 1 AND studentinproject.Status = 1)",
       [course, course],
       (error, Result) => {
         if (error) {
@@ -245,7 +245,7 @@ Student.getStdInCourNotInProject = async (project, course, cb) => {
 Student.getStdNotInCour = async (course, cb) => {
   try {
     db.query(
-      "SELECT * from student WHERE student.Id NOT IN (SELECT studentincourse.StudentId from studentincourse, (SELECT course.id as CourseId FROM course, (SELECT course.SemesterId, course.SubjectId from course WHERE course.id = ?) AS S WHERE course.SemesterId = S.SemesterId AND course.SubjectId = S.SubjectId) as L WHERE studentincourse.CourseId = L.CourseId)",
+      "SELECT * from student WHERE student.Id NOT IN (SELECT studentincourse.StudentId from studentincourse, (SELECT course.id as CourseId FROM course, (SELECT course.SemesterId, course.SubjectId from course WHERE course.id = ? AND course.Status = 1) AS S WHERE course.SemesterId = S.SemesterId AND course.SubjectId = S.SubjectId AND course.Status = 1) as L WHERE studentincourse.CourseId = L.CourseId) AND student.Status = 1",
       [course],
       (error, Result) => {
         if (error) {
@@ -264,7 +264,7 @@ Student.getStdNotInCour = async (course, cb) => {
 Student.getStdNotInPrj = function (project, cb) {
   try {
     db.query(
-      "SELECT * from student, (SELECT studentincourse.StudentId from studentincourse, (select project.CourseId from project WHERE project.Id = ?) as stinprj WHERE studentincourse.CourseId = stinprj.CourseId AND studentincourse.StudentId NOT IN (SELECT studentinproject.StudentId from student, studentinproject WHERE student.Id = studentinproject.StudentId AND studentinproject.ProjectId = ?)) as stds WHERE student.Id = stds.StudentId",
+      "SELECT * from student, (SELECT studentincourse.StudentId from studentincourse, (select project.CourseId from project WHERE project.Id = ? AND project.Status = 1) as stinprj WHERE studentincourse.Status = 1 AND studentincourse.CourseId = stinprj.CourseId AND studentincourse.StudentId NOT IN (SELECT studentinproject.StudentId from student, studentinproject WHERE student.Id = studentinproject.StudentId AND studentinproject.ProjectId = ? AND studentinproject.Status = 1 AND student.Status = 1)) as stds WHERE student.Id = stds.StudentId AND student.Status = 1",
       [project, project],
       (error, Result) => {
         if (error) {

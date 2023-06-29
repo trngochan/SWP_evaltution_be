@@ -42,9 +42,8 @@ exports.update = function (req, res) {
 };
 
 exports.getStdInCourNotInProject = function (req, res) {
-  const project = req.params.project;
   const course = req.params.course;
-  Student.getStdInCourNotInProject(project, course, (result) => {
+  Student.getStdInCourNotInProject(course, (result) => {
     res.send(result);
   });
 };

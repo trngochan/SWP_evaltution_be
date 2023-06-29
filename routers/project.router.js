@@ -28,4 +28,5 @@ module.exports = function (router) {
     "/project/:lectureinboard/getprojectmarked",
     projectController.getProjectMarked
   );
+  router.get("/project/getallpubliced", projectController.getPubliceds);
 };

@@ -9,7 +9,7 @@ const scoreColumn = function (column) {
 scoreColumn.checkDoubleId = function (id) {
   return Promise(function (resolve, reject) {
     db.query(
-      "SELECT * from scorecolumn WHERE id = ?",
+      "SELECT * from scorecolumn WHERE id = ? and Status = 1",
       [id],
       function (err, res) {
         if (err) reject(err);
@@ -54,7 +54,7 @@ scoreColumn.add = function (data, cb) {
 scoreColumn.getByTemplateId = function (id, cb) {
   try {
     db.query(
-      "SELECT id,name,percent FROM scorecolumn WHERE templateid =?",
+      "SELECT id,name,percent FROM scorecolumn WHERE templateid =? and Status = 1",
       [id],
       function (err, data) {
         if (err) {
@@ -72,7 +72,7 @@ scoreColumn.getByTemplateId = function (id, cb) {
 scoreColumn.getBySubjectId = function (id, cb) {
   try {
     db.query(
-      "select * from template,scorecolumn WHERE template.SubjectId = ? AND scorecolumn.TemplateId = template.id;",
+      "select * from template,scorecolumn WHERE template.SubjectId = ? AND scorecolumn.TemplateId = template.id and template.Status = 1 AND scorecolumn.Status = 1;",
       [id],
       function (err, data) {
         if (err) {

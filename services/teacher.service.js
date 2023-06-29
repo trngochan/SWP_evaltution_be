@@ -6,7 +6,7 @@ Teacher.login = function (data, result) {
   const param = [data.username, data.password];
   try {
     db.query(
-      "SELECT username, role, id, name from lecture where username = ? && password = ?",
+      "SELECT username, role, id, name from lecture where username = ? && password = ? and Status = 1 ",
       param,
       function (err, data) {
         if (err) {
@@ -32,7 +32,7 @@ Teacher.login = function (data, result) {
 
 Teacher.checkDoubleUser = (username) => {
   return new Promise((resolve, reject) => {
-    const query = "SELECT * FROM lecture WHERE username = ?";
+    const query = "SELECT * FROM lecture WHERE username = ? and Status = 1";
     db.query(query, [username], (error, results) => {
       if (error) {
         reject(error);
@@ -82,7 +82,7 @@ Teacher.add = async function (data, cb) {
 
 Teacher.getAll = function (cb) {
   db.query(
-    "SELECT id,name, birthday, phonenumber, address FROM lecture",
+    "SELECT id,name, birthday, phonenumber, address FROM lecture where lecture.Status = 1",
     function (err, data) {
       if (err) {
         cb(err);
@@ -95,7 +95,8 @@ Teacher.getAll = function (cb) {
 
 Teacher.getByLectureInBoard = function (id, cb) {
   db.query(
-    `select * from lecture,(select Lecture_id from lectureinboard,(select EvaluationBoardId from lectureinboard WHERE lectureinboard.Id = ${id}) as evaInBoard WHERE lectureinboard.EvaluationBoardId = evaInBoard.EvaluationBoardId) as listTeach WHERE lecture.id = listTeach.Lecture_id;`,
+    `SELECT * FROM lecture, ( SELECT Lecture_id FROM lectureinboard, ( SELECT EvaluationBoardId FROM lectureinboard WHERE lectureinboard.Id = ? AND lectureinboard.Status = 1 ) AS evaInBoard WHERE lectureinboard.EvaluationBoardId = evaInBoard.EvaluationBoardId AND lectureinboard.Status = 1 ) AS listTeach WHERE lecture.id = listTeach.Lecture_id AND lecture.Status = 1;`,
+    [id],
     function (err, data) {
       if (err) {
         cb(err);
@@ -108,7 +109,8 @@ Teacher.getByLectureInBoard = function (id, cb) {
 
 Teacher.getByLectureInBoard = function (id, cb) {
   db.query(
-    `select * from lecture,(select Lecture_id from lectureinboard,(select EvaluationBoardId from lectureinboard WHERE lectureinboard.Id = ${id}) as evaInBoard WHERE lectureinboard.EvaluationBoardId = evaInBoard.EvaluationBoardId) as listTeach WHERE lecture.id = listTeach.Lecture_id;`,
+    `SELECT lecture.Id, Name, lecture.PhoneNumber, lecture.Address FROM lectureinboard, lecture WHERE lectureinboard.EvaluationBoardId = ? AND lectureinboard.Lecture_id = lecture.Id AND lectureinboard.Status = 1  AND lecture.Status = 1;`,
+    [id],
     function (err, data) {
       if (err) {
         cb(err);
@@ -123,7 +125,7 @@ Teacher.getByStdIdAndCourId = async function (courId, stdId, cb) {
   const evaluationId = await EvulutionBroand.getByStdIdAndCourId(courId, stdId);
   const a = evaluationId?.EvaluationBoardId;
   db.query(
-    `select lectureinboard.Lecture_id, Name, BirthDay, PhoneNumber, Address, lectureinboard.Id as lectureinboardId from lecture, lectureinboard WHERE lectureinboard.EvaluationBoardId = ${a} and lectureinboard.Lecture_id = lecture.id`,
+    `select lectureinboard.Lecture_id, Name, BirthDay, PhoneNumber, Address, lectureinboard.Id as lectureinboardId from lecture, lectureinboard WHERE lectureinboard.EvaluationBoardId = ${a} and lectureinboard.Lecture_id = lecture.id  AND lecture.Status = 1 AND lectureinboard.Status = 1`,
     function (err, data) {
       if (err) {
         cb(err);
@@ -136,7 +138,7 @@ Teacher.getByStdIdAndCourId = async function (courId, stdId, cb) {
 
 Teacher.getQuanlityOfBoarnd = async function (projectId, cb) {
   db.query(
-    `select COUNT(lectureinboard.Lecture_id) as totalTeacher FROM lectureinboard,(SELECT projectinboard.EvaluationBoardId from project, projectinboard WHERE project.Id = projectinboard.ProjectId and project.Id = ${projectId}) as board WHERE lectureinboard.EvaluationBoardId = board.EvaluationBoardId;`,
+    `select COUNT(lectureinboard.Lecture_id) as totalTeacher FROM lectureinboard,(SELECT projectinboard.EvaluationBoardId from project, projectinboard WHERE project.Id = projectinboard.ProjectId and project.Id = ${projectId} AND project.Status = 1 AND projectinboard.Status = 1) as board WHERE lectureinboard.EvaluationBoardId = board.EvaluationBoardId AND lectureinboard.Status = 1;`,
     function (err, data) {
       if (err) {
         cb(err);
@@ -149,7 +151,7 @@ Teacher.getQuanlityOfBoarnd = async function (projectId, cb) {
 
 Teacher.getQuanMarkedOfBoarnd = async function (projectId, cb) {
   db.query(
-    `SELECT COUNT(DISTINCT score.LectureInBoardId) AS totalTeachersMark FROM Score, (SELECT studentinproject.Id from project, studentinproject WHERE project.Id = studentinproject.ProjectId and project.Id = ${projectId} LIMIT 1) as stdinpro WHERE score.StudentInProjectId = stdinpro.id;`,
+    `SELECT COUNT(DISTINCT score.LectureInBoardId) AS totalTeachersMark FROM Score, (SELECT studentinproject.Id from project, studentinproject WHERE studentinproject.Status = 1 and project.Status = 1 AND project.Id = studentinproject.ProjectId and project.Id = ${projectId} LIMIT 1) as stdinpro WHERE score.StudentInProjectId = stdinpro.id AND Score.Status = 1;`,
     function (err, result) {
       if (err) {
         cb(err);
@@ -162,7 +164,7 @@ Teacher.getQuanMarkedOfBoarnd = async function (projectId, cb) {
 
 Teacher.getNotIntBoard = async function (id, cb) {
   db.query(
-    "SELECT * FROM lecture WHERE lecture.Id NOT IN (SELECT lectureinboard.Lecture_id from lectureinboard WHERE lectureinboard.EvaluationBoardId = ?);",
+    "SELECT * FROM lecture WHERE lecture.Id NOT IN (SELECT lectureinboard.Lecture_id from lectureinboard WHERE lectureinboard.Status = 1 AND lectureinboard.EvaluationBoardId = ?) AND lecture.Status = 1;",
     [id],
     function (err, result) {
       if (err) {

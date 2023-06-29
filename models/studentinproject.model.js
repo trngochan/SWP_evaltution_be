@@ -25,7 +25,7 @@ StudentInProject.add = function (data, cb) {
 
 StudentInProject.remove = function (id, cb) {
   db.query(
-    "DELETE FROM `studentinproject` WHERE Id = ?",
+    "UPDATE studentinproject SET Status = 0 where Id = ?;",
     [id],
     function (err, result) {
       if (err)

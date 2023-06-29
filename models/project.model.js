@@ -6,6 +6,30 @@ const Project = function (project) {
     (this.notion = project.notion);
 };
 
+Project.getPubliceds = function (cb) {
+  try {
+    db.query(
+      "select DISTINCT studentinproject.ProjectId from score, studentinproject WHERE score.isAvarage = 1 AND score.StudentInProjectId = studentinproject.Id AND score.Status = 1 AND studentinproject.Status = 1;",
+      (err, result) => {
+        if (err)
+          return cb({
+            status: 401,
+            message: "Insert failed",
+          });
+        return cb({
+          status: 200,
+          data: result,
+        });
+      }
+    );
+  } catch (error) {
+    cb({
+      status: 500,
+      message: "Internal error in project update",
+    });
+  }
+};
+
 Project.update = function (data, cb) {
   try {
     db.query(
@@ -35,7 +59,7 @@ Project.update = function (data, cb) {
 Project.getProjectMarked = function (id, cb) {
   try {
     db.query(
-      "SELECT DISTINCT studentinproject.ProjectId from studentinproject, (SELECT DISTINCT Score.StudentInProjectId FROM `score` WHERE LectureInBoardId = ?) AS listStd WHERE studentinproject.Id = listStd.StudentInProjectId",
+      "SELECT DISTINCT studentinproject.ProjectId from studentinproject, (SELECT DISTINCT Score.StudentInProjectId FROM `score` WHERE LectureInBoardId = ? AND score.Status = 1) AS listStd WHERE studentinproject.Id = listStd.StudentInProjectId AND studentinproject.Status = 1",
       [id],
       (err, result) => {
         if (err)
@@ -86,7 +110,8 @@ Project.add = function (data, cb) {
 Project.getStdInProIdById = function (id) {
   return new Promise((resolve, reject) => {
     db.query(
-      `SELECT studentinproject.Id FROM project, studentinproject WHERE project.Id = studentinproject.ProjectId AND project.Id = ${id}`,
+      `SELECT studentinproject.Id FROM project, studentinproject WHERE project.Id = studentinproject.ProjectId AND project.Id = ? AND project.Status = 1 AND studentinproject.Status = 1`,
+      [id],
       (error, results) => {
         if (error) {
           reject(error);
@@ -100,7 +125,7 @@ Project.getStdInProIdById = function (id) {
 
 Project.getAll = function (cb) {
   try {
-    db.query("SELECT * FROM project", (err, result) => {
+    db.query("SELECT * FROM project where Status = 1", (err, result) => {
       if (err) {
         cb(err);
       } else {
@@ -114,13 +139,17 @@ Project.getAll = function (cb) {
 
 Project.getById = function (id, cb) {
   try {
-    db.query("SELECT * FROM project WHERE id =?", [id], (err, result) => {
-      if (err) {
-        cb(err);
-      } else {
-        cb(result);
+    db.query(
+      "SELECT * FROM project WHERE id =? and Status = 1",
+      [id],
+      (err, result) => {
+        if (err) {
+          cb(err);
+        } else {
+          cb(result);
+        }
       }
-    });
+    );
   } catch (error) {
     cb(error);
   }
@@ -129,7 +158,7 @@ Project.getById = function (id, cb) {
 Project.getByEvalutionId = function (id, cb) {
   try {
     db.query(
-      "SELECT CourseId, project.id,name,notion, `order`, ProtectTime from projectinboard,project WHERE projectinboard.EvaluationBoardId = ? AND projectinboard.ProjectId = project.Id;",
+      "SELECT CourseId, project.id,name,notion, `order`, ProtectTime from projectinboard,project WHERE projectinboard.EvaluationBoardId = ? AND projectinboard.ProjectId = project.Id  AND projectinboard.Status = 1 and project.Status = 1;",
       [id],
       (err, result) => {
         if (err) {
@@ -147,7 +176,7 @@ Project.getByEvalutionId = function (id, cb) {
 Project.getByCourseId = function (id, cb) {
   try {
     db.query(
-      `SELECT project.id as prjId, project.Name, notion, project.CourseId from course,project WHERE course.Id = project.CourseId AND course.id = ${id};`,
+      `SELECT project.id as prjId, project.Name, notion, project.CourseId from course,project WHERE course.Id = project.CourseId AND course.id = ? AND course.Status = 1 AND project.Status = 1;`,
       [id],
       (err, result) => {
         if (err) {
@@ -167,9 +196,10 @@ Project.getIDStdInCourseByCourseIdAndStdId = function (courseId, studentId) {
     db.query(
       `SELECT studentinproject.id
       FROM course
-      JOIN project ON course.Id = project.CourseId
+      JOIN project ON course.Id = project.CourseId AND course.Status = 1 AND project.Status = 1
       JOIN studentinproject ON studentinproject.ProjectId = project.id
-      WHERE course.id = ${courseId} AND studentinproject.StudentId = ${studentId}`,
+      WHERE course.id = ? AND studentinproject.StudentId = ? AND studentinproject.Status = 1`,
+      [courseId, studentId],
       (err, result) => {
         if (err) {
           console.log(err);
@@ -185,7 +215,8 @@ Project.getIDStdInCourseByCourseIdAndStdId = function (courseId, studentId) {
 Project.getProjectNoHasBoard = function (id) {
   return new Promise(function (resolve, reject) {
     db.query(
-      `SELECT * from (select project.Id, project.Name, project.Notion, project.CourseId from project, (select course.id from eveluationboard, course WHERE eveluationboard.SemesterId = course.SemesterId AND eveluationboard.SubjectId = course.SubjectId and eveluationboard.Id = ${id}) as listCour WHERE listCour.id = project.CourseId) as lisrProjecr WHERE lisrProjecr.Id NOT IN (SELECT projectinboard.ProjectId FROM projectinboard)`,
+      `SELECT * from (select project.Id, project.Name, project.Notion, project.CourseId from project, (select course.id from eveluationboard, course WHERE eveluationboard.SemesterId = course.SemesterId AND eveluationboard.SubjectId = course.SubjectId and eveluationboard.Id = ? AND eveluationboard.Status = 1 AND course.Status = 1) as listCour WHERE listCour.id = project.CourseId AND project.Status = 1) as lisrProjecr WHERE lisrProjecr.Id NOT IN (SELECT projectinboard.ProjectId FROM projectinboard)`,
+      [id],
       function (err, data) {
         if (err) {
           reject({
@@ -206,7 +237,8 @@ Project.getProjectNoHasBoard = function (id) {
 Project.getIdBystdandCourse = function (stdid, courid) {
   return new Promise(function (resolve, reject) {
     db.query(
-      `select stdinproId FROM (SELECT studentinproject.ProjectId, studentinproject.Id as stdinproId from student, studentinproject WHERE student.Id = ${stdid} and student.id = studentinproject.StudentId) prjofstd, (select project.Id from course, project WHERE course.id = ${courid} AND course.id = project.CourseId) prjincourse WHERE projectId = Id`,
+      `select stdinproId FROM (SELECT studentinproject.ProjectId, studentinproject.Id as stdinproId from student, studentinproject WHERE student.Id = ? and student.id = studentinproject.StudentId AND student.Status = 1 AND studentinproject.Status = 1) prjofstd, (select project.Id from course, project WHERE course.id = ? AND course.id = project.CourseId AND course.Status = 1 AND project.Status = 1) prjincourse WHERE projectId = Id`,
+      [stdid, courid],
       (err, result) => {
         if (err) {
           console.log(err);

@@ -8,6 +8,12 @@ exports.getById = function (req, res) {
   });
 };
 
+exports.getPubliceds = function (req, res) {
+  Project.getPubliceds((result) => {
+    res.send(result);
+  });
+};
+
 exports.getProjectMarked = function (req, res) {
   const lectureinboard = req.params.lectureinboard;
   Project.getProjectMarked(lectureinboard, (result) => {

@@ -35,20 +35,20 @@ Score.getScore = async function (stdid, courid, cb) {
   try {
     const StdiInPrj = await Project.getIdBystdandCourse(stdid, courid);
     db.query(
-      `SELECT * from score where StudentInProjectId = ${StdiInPrj} and isAvarage = 1`,
+      `SELECT * from score where StudentInProjectId = ${StdiInPrj} and isAvarage = 1 and Status = 1`,
       (err, result) => {
         if (err) return cb(err);
         if (result.length <= 0) {
           return cb({
             status: 204,
-            message: "No public for you",
+            message: "Score not public",
           });
         } else {
           return cb({
             status: 201,
             data: {
               score: result[0]?.Score,
-              status: result[0]?.status,
+              status: result[0]?.Result,
             },
           });
         }
@@ -62,10 +62,10 @@ Score.getScore = async function (stdid, courid, cb) {
 Score.calAvgScoreBystdInPrj = function (id, cb) {
   try {
     db.query(
-      `INSERT INTO score (CourseId, StudentInProjectId, score, isAvarage, status)
+      `INSERT INTO score (CourseId, StudentInProjectId, score, isAvarage, Result)
       SELECT teacher_avg.CourseId, teacher_avg.StudentInProjectId, AVG(teacher_avg.avg_score) AS score,
              1 AS isAvarage,
-             CASE WHEN AVG(teacher_avg.avg_score) > 5 THEN 1 ELSE 0 END AS status
+             CASE WHEN AVG(teacher_avg.avg_score) > 5 THEN 1 ELSE 0 END AS Result
       FROM (
         SELECT SUM(s.Score * c.Percent) AS avg_score, s.CourseId, s.StudentInProjectId
         FROM score s

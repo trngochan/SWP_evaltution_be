@@ -10,7 +10,7 @@ const Course = function (course) {
 Course.getBySubject = function (id, cb) {
   try {
     db.query(
-      "select * from Course where SubjectId = ?",
+      "select * from Course where SubjectId = ? and Status = 1",
       [id],
       function (err, result) {
         if (err) {
@@ -24,12 +24,16 @@ Course.getBySubject = function (id, cb) {
 
 Course.getByID = function (id, cb) {
   try {
-    db.query("select * from course where id = ?", [id], function (err, result) {
-      if (err) {
-        return cb(err);
+    db.query(
+      "select * from course where id = ? and Status = 1",
+      [id],
+      function (err, result) {
+        if (err) {
+          return cb(err);
+        }
+        return cb(result);
       }
-      return cb(result);
-    });
+    );
   } catch (error) {
     cb(error);
   }
@@ -37,7 +41,7 @@ Course.getByID = function (id, cb) {
 
 Course.getAll = function (cb) {
   try {
-    db.query("SELECT * FROM Course", function (err, data) {
+    db.query("SELECT * FROM Course Where Status =1", function (err, data) {
       if (err) return cb(err);
       return cb(data);
     });
@@ -49,7 +53,8 @@ Course.getAll = function (cb) {
 Course.getByStuentID = function (id, cb) {
   try {
     db.query(
-      `SELECT * from studentincourse, course where studentincourse.CourseId = course.Id AND studentincourse.StudentId = ${id};`,
+      `SELECT * from studentincourse, course where studentincourse.CourseId = course.Id AND studentincourse.StudentId = ? AND studentincourse.Status = 1 and course.Status = 1;`,
+      [id],
       function (err, data) {
         if (err) return cb(err);
         return cb(data);
@@ -63,7 +68,7 @@ Course.getByStuentID = function (id, cb) {
 Course.getByTeacherID = function (id, cb) {
   try {
     db.query(
-      `SELECT * from course,lecture where lecture.id = ${id} AND lecture.id = course.LectureId;`,
+      `SELECT * from course,lecture where lecture.id = ${id} AND lecture.id = course.LectureId AND course.Status = 1 AND lecture.Status = 1; `,
       function (err, data) {
         if (err) return cb(err);
         return cb(data);

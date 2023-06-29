@@ -7,7 +7,7 @@ const Subject = function (subject) {
 };
 
 Subject.getAll = function (cb) {
-  db.query(`SELECT * from subject`, function (err, result) {
+  db.query(`SELECT * from subject where Status = 1`, function (err, result) {
     if (err) {
       cb(err);
       return;
@@ -19,7 +19,7 @@ Subject.getAll = function (cb) {
 Subject.getById = function (id, cb) {
   try {
     db.query(
-      "select * from subject where id = ?",
+      "select * from subject where id = ? and Status = 1",
       [id],
       function (err, result) {
         if (err) return cb(err);
