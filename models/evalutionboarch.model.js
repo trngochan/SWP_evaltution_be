@@ -9,10 +9,13 @@ const EvulutionBroand = function (evulutionBroand) {
 
 EvulutionBroand.getAll = function (cb) {
   try {
-    db.query("select * from eveluationboard", function (err, data) {
-      if (err) cb(err);
-      else cb(data);
-    });
+    db.query(
+      "select * from eveluationboard where Status = 1",
+      function (err, data) {
+        if (err) cb(err);
+        else cb(data);
+      }
+    );
   } catch (error) {}
 };
 

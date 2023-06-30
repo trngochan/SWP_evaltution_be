@@ -244,7 +244,11 @@ Project.getIdBystdandCourse = function (stdid, courid) {
           console.log(err);
           reject(err);
         } else {
-          resolve(result[0]?.stdinproId);
+          if (result.length > 0) {
+            resolve(result[0]?.stdinproId);
+          } else {
+            resolve(-1);
+          }
         }
       }
     );

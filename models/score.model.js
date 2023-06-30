@@ -34,26 +34,34 @@ Score.insertScore = function (dataInfor, dataScores, cb) {
 Score.getScore = async function (stdid, courid, cb) {
   try {
     const StdiInPrj = await Project.getIdBystdandCourse(stdid, courid);
-    db.query(
-      `SELECT * from score where StudentInProjectId = ${StdiInPrj} and isAvarage = 1 and Status = 1`,
-      (err, result) => {
-        if (err) return cb(err);
-        if (result.length <= 0) {
-          return cb({
-            status: 204,
-            message: "Score not public",
-          });
-        } else {
-          return cb({
-            status: 201,
-            data: {
-              score: result[0]?.Score,
-              status: result[0]?.Result,
-            },
-          });
+    console.log(StdiInPrj);
+    if (StdiInPrj == -1) {
+      return cb({
+        status: 204,
+        message: "Score not public",
+      });
+    } else {
+      db.query(
+        `SELECT * from score where StudentInProjectId = ${StdiInPrj} and isAvarage = 1 and Status = 1`,
+        (err, result) => {
+          if (err) return cb(err);
+          if (result.length <= 0) {
+            return cb({
+              status: 204,
+              message: "Score not public",
+            });
+          } else {
+            return cb({
+              status: 201,
+              data: {
+                score: result[0]?.Score,
+                status: result[0]?.Result,
+              },
+            });
+          }
         }
-      }
-    );
+      );
+    }
   } catch (error) {
     console.log(error);
   }
