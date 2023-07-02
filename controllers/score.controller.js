@@ -18,6 +18,21 @@ exports.insertScore = function (req, res) {
   });
 };
 
+exports.updateScore = function (req, res) {
+  const data = req.body;
+  Score.updateScore(data, (result) => {
+    res.send(result);
+  });
+};
+
+exports.getByLiBStdPrj = function (req, res) {
+  const { lib, std, prj } = req.params;
+  console.log(lib, std, prj);
+  Score.getByLiBStdPrj(lib, std, prj, (result) => {
+    res.send(result);
+  });
+};
+
 exports.calAvgScoreBystdInPrj = function (req, res) {
   const stdinprj = req.params.stdinprj;
   Score.calAvgScoreBystdInPrj(stdinprj, (result) => {

@@ -7,4 +7,6 @@ module.exports = function (router) {
     "/score/:stdinprj/calAvgScore",
     scoreController.calAvgScoreBystdInPrj
   );
+  router.get("/score/:lib/:std/:prj", scoreController.getByLiBStdPrj);
+  router.put("/score/update", scoreController.updateScore);
 };

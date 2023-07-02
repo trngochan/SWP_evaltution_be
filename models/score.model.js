@@ -9,6 +9,68 @@ const Score = function (Score) {
     (this.score = Score.score);
 };
 
+Score.getByLiBStdPrj = function (lib, std, prj, cb) {
+  try {
+    db.query(
+      "SELECT P.StudentId,P.Id, score.ScoreColumnId, score.Score FROM (SELECT studentinproject.Id, studentinproject.StudentId FROM studentinproject WHERE studentinproject.StudentId = ? AND studentinproject.ProjectId = ? AND studentinproject.Status = 1) AS P, score WHERE P.Id = score.StudentInProjectId AND score.Status = 1 AND score.isAvarage IS NULL AND score.LectureInBoardId = ?",
+      [std, prj, lib],
+      function (err, result) {
+        if (err) {
+          console.log(err);
+          return cb({
+            status: 401,
+            message: "Failed to getByLiBStdPrj",
+          });
+        }
+        return cb({
+          status: 200,
+          data: result,
+        });
+      }
+    );
+  } catch (error) {
+    console.log(error);
+    return cb({
+      status: 500,
+      message: "Error at add getByLiBStdPrj",
+    });
+  }
+};
+
+Score.updateScore = function (data, cb) {
+  try {
+    db.query(
+      "UPDATE `score` SET `Score`= ?  WHERE `CourseId`= ?  AND `StudentInProjectId`= ?  AND `LectureInBoardId`= ?  AND `ScoreColumnId`= ? AND Status = 1",
+      [
+        data.score,
+        data.course,
+        data.stdInPro,
+        data.lecInBoard,
+        data.scoreColumnId,
+      ],
+      function (err, result) {
+        if (err) {
+          console.log(err);
+          return cb({
+            status: 401,
+            message: "Failed to updateScore",
+          });
+        }
+        return cb({
+          status: 200,
+          data: "Update score successfully",
+        });
+      }
+    );
+  } catch (error) {
+    console.log(error);
+    return cb({
+      status: 500,
+      message: "Error at add updateScore",
+    });
+  }
+};
+
 Score.insertScore = function (dataInfor, dataScores, cb) {
   try {
     for (let key in dataScores) {
