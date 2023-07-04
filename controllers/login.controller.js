@@ -9,19 +9,19 @@ exports.loginStudent = function (req, res) {
         {
           username: respone?.data[0]?.username,
           role: respone?.data[0]?.role,
-          id: respone?.data[0]?.id
+          id: respone?.data[0]?.id,
         },
         "mk"
       );
+      return res.json({
+        token: token,
+        data: respone,
+      });
     } else {
       return res.json({
-        data: respone
+        data: respone,
       });
     }
-    return res.json({
-      token: token,
-      data: respone,
-    });
   });
 };
 
@@ -32,13 +32,13 @@ exports.loginTeacher = function (req, res) {
         {
           username: respone?.data[0]?.username,
           role: respone?.data[0]?.role,
-          id: respone?.data[0]?.id
+          id: respone?.data[0]?.id,
         },
         "mk"
       );
     } else {
       return res.json({
-        data: respone
+        data: respone,
       });
     }
     return res.json({
@@ -55,13 +55,13 @@ exports.loginAdmin = function (req, res) {
         {
           username: respone?.data[0]?.username,
           role: respone?.data[0]?.role,
-          id: respone?.data[0]?.id
+          id: respone?.data[0]?.id,
         },
         "mk"
       );
     } else {
       return res.json({
-        data: respone
+        data: respone,
       });
     }
     return res.json({

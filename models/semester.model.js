@@ -22,6 +22,32 @@ semester.getAll = function (cb) {
   }
 };
 
+semester.getById = function (id, cb) {
+  try {
+    db.query(
+      "select * from semester where id = ? and status = 1",
+      [id],
+      function (err, results) {
+        if (err)
+          return cb({
+            status: 400,
+            messaege: "Get by id failed",
+          });
+        return cb({
+          status: 200,
+          data: results,
+        });
+      }
+    );
+  } catch (error) {
+    console.log(error);
+    cb({
+      status: 500,
+      messaege: "Error at get by id",
+    });
+  }
+};
+
 semester.add = function (data, cb) {
   const data1 = [
     data.year,

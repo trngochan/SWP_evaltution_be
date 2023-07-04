@@ -3,6 +3,7 @@ const auth = require("../common/_AUTH");
 module.exports = function (router) {
   const teacherController = require("../controllers/teacher.controller");
 
+  router.get("/teacher/:id", teacherController.getById);
   router.get("/teacher/getall", teacherController.getAll);
   router.get(
     "/teacher/:lectureInBoard/linb",

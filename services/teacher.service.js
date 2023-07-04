@@ -30,6 +30,33 @@ Teacher.login = function (data, result) {
   }
 };
 
+Teacher.getById = (id, cb) => {
+  try {
+    db.query(
+      "SELECT * from lecture where id = ? and Status = 1 ",
+      [id],
+      function (err, data) {
+        if (err) {
+          return cb({
+            status: 400,
+            message: "Error getting",
+          });
+        }
+        return cb({
+          status: 200,
+          data: data,
+        });
+      }
+    );
+  } catch (error) {
+    console.log(error);
+    cb({
+      status: 500,
+      message: "Error getting",
+    });
+  }
+};
+
 Teacher.checkDoubleUser = (username) => {
   return new Promise((resolve, reject) => {
     const query = "SELECT * FROM lecture WHERE username = ? and Status = 1";

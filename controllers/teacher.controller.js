@@ -6,6 +6,13 @@ exports.getAll = function (req, res) {
   });
 };
 
+exports.getById = function (req, res) {
+  const id = req.params.id;
+  Teacher.getById(id, (result) => {
+    res.send(result);
+  });
+};
+
 exports.add = function (req, res) {
   const data = req.body;
   Teacher.add(data, (result) => {
