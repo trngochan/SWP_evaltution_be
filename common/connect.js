@@ -8,6 +8,7 @@ var connection = mysql.createConnection({
 });
 
 connection.connect(function (err) {
+  console.log(err);
   if (err) console.error("ket noi k thanh cong");
 });
 
