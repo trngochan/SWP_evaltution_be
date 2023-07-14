@@ -7,6 +7,31 @@ const Course = function (course) {
   this.LectureId = course.LectureId;
 };
 
+Course.getBySemSub = function (sem, sub, cb) {
+  try {
+    db.query(
+      `select * from Course where SubjectId = ? and SemesterId = ? and Status = 1`,
+      [sub, sem],
+      function (err, data) {
+        if (err)
+          return cb({
+            status: 401,
+            message: "failed",
+          });
+        return cb({
+          status: 200,
+          data: data,
+        });
+      }
+    );
+  } catch (error) {
+    return cb({
+      status: 501,
+      message: "Error inserting",
+    });
+  }
+};
+
 Course.getBySubject = function (id, cb) {
   try {
     db.query(

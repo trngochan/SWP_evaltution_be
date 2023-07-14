@@ -7,6 +7,14 @@ exports.getByStudentID = function (req, res) {
   });
 };
 
+exports.getBySemSub = function (req, res) {
+  const sem = req.params.sem;
+  const sub = req.params.sub;
+  Course.getBySemSub(sem, sub, (result) => {
+    res.send(result);
+  });
+};
+
 exports.getBySubject = function (req, res) {
   const subject = req.params.subject;
   Course.getBySubject(subject, (result) => {

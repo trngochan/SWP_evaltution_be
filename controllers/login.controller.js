@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const Student = require("../models/student.model");
 const Teacher = require("../services/teacher.service");
+const Admin = require("../models/admin.model");
 
 exports.loginStudent = function (req, res) {
   Student.login(req.body, function (respone) {
@@ -49,7 +50,7 @@ exports.loginTeacher = function (req, res) {
 };
 
 exports.loginAdmin = function (req, res) {
-  Student.login(req.body, function (respone) {
+  Admin.login(req.body, function (respone) {
     if (respone.status === 200) {
       var token = jwt.sign(
         {
