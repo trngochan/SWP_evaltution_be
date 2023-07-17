@@ -11,7 +11,7 @@ const semester = function (semester) {
 semester.getAll = function (cb) {
   try {
     db.query(
-      "select * from Semester where Status = 1",
+      "select * from semester where Status = 1",
       function (err, results) {
         if (err) return cb(err);
         return cb(results);
