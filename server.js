@@ -29,6 +29,9 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
+app.options("*", cors());
+
 // cau hinh body parser
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
