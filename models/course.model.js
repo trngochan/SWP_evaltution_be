@@ -10,7 +10,7 @@ const Course = function (course) {
 Course.getBySemSub = function (sem, sub, cb) {
   try {
     db.query(
-      `select * from Course where SubjectId = ? and SemesterId = ? and Status = 1`,
+      `select * from Course where subjectId = ? and SemesterId = ? and Status = 1`,
       [sub, sem],
       function (err, data) {
         if (err)
@@ -35,7 +35,7 @@ Course.getBySemSub = function (sem, sub, cb) {
 Course.getBySubject = function (id, cb) {
   try {
     db.query(
-      "select * from Course where SubjectId = ? and Status = 1",
+      "select * from Course where subjectId = ? and Status = 1",
       [id],
       function (err, result) {
         if (err) {
@@ -66,7 +66,7 @@ Course.getByID = function (id, cb) {
 
 Course.getAll = function (cb) {
   try {
-    db.query("SELECT * FROM Course Where Status =1", function (err, data) {
+    db.query("SELECT * FROM course Where Status =1", function (err, data) {
       if (err) return cb(err);
       return cb(data);
     });
