@@ -23,9 +23,9 @@ app.use(
 
 app.use(
   cors({
-    origin: "https://swp-evalution-fe-y3fz.vercel.app/",
+    origin: "*",
     credentials: true,
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "DELETE", "PUT"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
