@@ -178,9 +178,10 @@ Teacher.getQuanlityOfBoarnd = async function (projectId, cb) {
 
 Teacher.getQuanMarkedOfBoarnd = async function (projectId, cb) {
   db.query(
-    `SELECT COUNT(DISTINCT score.LectureInBoardId) AS totalTeachersMark FROM Score, (SELECT studentinproject.Id from project, studentinproject WHERE studentinproject.Status = 1 and project.Status = 1 AND project.Id = studentinproject.ProjectId and project.Id = ${projectId} LIMIT 1) as stdinpro WHERE score.StudentInProjectId = stdinpro.id AND Score.Status = 1;`,
+    `SELECT COUNT(DISTINCT score.LectureInBoardId) AS totalTeachersMark FROM score, (SELECT studentinproject.Id from project, studentinproject WHERE studentinproject.Status = 1 and project.Status = 1 AND project.Id = studentinproject.ProjectId and project.Id = ${projectId} LIMIT 1) as stdinpro WHERE score.StudentInProjectId = stdinpro.id AND Score.Status = 1;`,
     function (err, result) {
       if (err) {
+        console.log(err);
         cb(err);
       } else {
         cb(result);
