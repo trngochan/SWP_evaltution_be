@@ -23,7 +23,7 @@ app.use(
 
 app.use(
   cors({
-    origin: "https://swp-evalution-fe.vercel.app/",
+    origin: "https://swp-evalution-fe-y3fz.vercel.app/",
     credentials: true,
     methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type", "Authorization"],
