@@ -160,7 +160,7 @@ Student.getByCourseId = async function (id, result) {
 
 Student.checkDoubleUser = (username) => {
   return new Promise((resolve, reject) => {
-    const query = "SELECT * FROM Student WHERE username = ? and Status = 1";
+    const query = "SELECT * FROM student WHERE username = ? and Status = 1";
     db.query(query, [username], (error, results) => {
       if (error) {
         reject(error);
@@ -173,7 +173,7 @@ Student.checkDoubleUser = (username) => {
 
 Student.checkDoubleCode = (code) => {
   return new Promise((resolve, reject) => {
-    const query = "SELECT * FROM Student WHERE code = ? and Status = 1";
+    const query = "SELECT * FROM student WHERE code = ? and Status = 1";
     db.query(query, [code], (error, results) => {
       if (error) {
         reject(error);

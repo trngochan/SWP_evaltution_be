@@ -11,7 +11,7 @@ const Template = function (template) {
 Template.getAll = function (cb) {
   try {
     db.query(
-      "Select * from Template where Status = 1",
+      "Select * from template where Status = 1",
       function (err, results) {
         cb(results);
       }
@@ -21,7 +21,7 @@ Template.getAll = function (cb) {
 
 Template.checkDoubleId = function (id) {
   return new Promise((resolve, reject) => {
-    const query = "select * from Template where id = ? and Status = 1";
+    const query = "select * from template where id = ? and Status = 1";
     db.query(query, [id], (err, results) => {
       if (err) {
         reject(err);
@@ -38,7 +38,7 @@ Template.add = async function (data, cb) {
     if (duplicateId.length > 0) {
       return cb({
         status: 401,
-        massage: "Duplicate ID Template",
+        massage: "Duplicate ID template",
       });
     } else {
       db.query(
