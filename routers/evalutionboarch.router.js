@@ -9,4 +9,5 @@ module.exports = function (router) {
     "/evalution/:project/getbyproject",
     avalutionController.getByProjectId
   );
+  router.delete("/evalution/:id", avalutionController.deleteByID);
 };

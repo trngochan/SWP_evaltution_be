@@ -18,6 +18,13 @@ exports.insertScore = function (req, res) {
   });
 };
 
+exports.deleteByID = function (req, res) {
+  const id = req.params.id;
+  Score.deleteByID(id, (result) => {
+    res.send(result);
+  });
+};
+
 exports.updateScore = function (req, res) {
   const data = req.body;
   Score.updateScore(data, (result) => {

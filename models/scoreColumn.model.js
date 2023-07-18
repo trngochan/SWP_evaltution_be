@@ -54,18 +54,27 @@ scoreColumn.add = function (data, cb) {
 scoreColumn.getByTemplateId = function (id, cb) {
   try {
     db.query(
-      "SELECT id,name,percent FROM scorecolumn WHERE templateid =? and Status = 1",
+      "SELECT id,name,percent FROM scorecolumn WHERE TemplateId =? and Status = 1",
       [id],
       function (err, data) {
         if (err) {
-          cb(err);
+          return cb({
+            status: 400,
+            message: "Error getting score column",
+          });
         } else {
-          cb(data);
+          return cb({
+            status: 200,
+            data: data,
+          });
         }
       }
     );
   } catch (error) {
-    cb(error);
+    return cb({
+      status: 500,
+      message: "Error at getByTemplateId",
+    });
   }
 };
 
@@ -84,6 +93,31 @@ scoreColumn.getBySubjectId = function (id, cb) {
     );
   } catch (error) {
     cb(error);
+  }
+};
+
+scoreColumn.deleteByID = function (id, cb) {
+  try {
+    db.query(
+      "UPDATE `scorecolumn` SET `Status`=0  WHERE Id = ? and Status = 1",
+      [id],
+      function (err, data) {
+        if (err)
+          return cb({
+            status: 401,
+            message: "Delete failed",
+          });
+        return cb({
+          status: 200,
+          message: "Delete successful",
+        });
+      }
+    );
+  } catch (error) {
+    return cb({
+      status: 501,
+      message: "Error deleting course",
+    });
   }
 };
 

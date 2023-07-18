@@ -7,6 +7,13 @@ exports.getByTemplateId = function (req, res) {
   });
 };
 
+exports.deleteByID = function (req, res) {
+  const id = req.params.id;
+  scoreColumn.deleteByID(id, (result) => {
+    res.send(result);
+  });
+};
+
 exports.getBySubjectId = function (req, res) {
   const id = req.params.subject;
   scoreColumn.getBySubjectId(id, (result) => {

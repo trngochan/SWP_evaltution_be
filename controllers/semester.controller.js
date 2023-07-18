@@ -13,6 +13,13 @@ exports.add = function (req, res) {
   });
 };
 
+exports.deleteByID = function (req, res) {
+  const id = req.params.id;
+  semester.deleteByID(id, (result) => {
+    res.send(result);
+  });
+};
+
 exports.getById = function (req, res) {
   const id = req.params.id;
   semester.getById(id, (result) => {

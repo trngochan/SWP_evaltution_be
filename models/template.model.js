@@ -32,6 +32,31 @@ Template.checkDoubleId = function (id) {
   });
 };
 
+Template.getById = function (id, cb) {
+  try {
+    db.query(
+      "Select * from template where Status = 1 and Id = ?",
+      [id],
+      function (err, results) {
+        if (err)
+          return cb({
+            status: 400,
+            message: "Error getting template",
+          });
+        return cb({
+          status: 200,
+          data: results,
+        });
+      }
+    );
+  } catch (error) {
+    return cb({
+      status: 500,
+      message: "Error getting template server",
+    });
+  }
+};
+
 Template.add = async function (data, cb) {
   try {
     const duplicateId = await Template.checkDoubleId(data.id);
@@ -64,6 +89,31 @@ Template.add = async function (data, cb) {
     return cb({
       status: 500,
       massage: "Error at tempalte add",
+    });
+  }
+};
+
+Template.deleteByID = function (id, cb) {
+  try {
+    db.query(
+      "UPDATE `template` SET `Status`=0  WHERE Id = ? and Status = 1",
+      [id],
+      function (err, data) {
+        if (err)
+          return cb({
+            status: 401,
+            message: "Delete failed",
+          });
+        return cb({
+          status: 200,
+          message: "Delete successful",
+        });
+      }
+    );
+  } catch (error) {
+    return cb({
+      status: 501,
+      message: "Error deleting course",
     });
   }
 };

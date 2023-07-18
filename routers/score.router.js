@@ -9,4 +9,5 @@ module.exports = function (router) {
   );
   router.get("/score/:lib/:std/:prj", scoreController.getByLiBStdPrj);
   router.put("/score/update", scoreController.updateScore);
+  router.delete("/score/:id", scoreController.deleteByID);
 };

@@ -16,4 +16,5 @@ module.exports = function (router) {
     studentController.getStdNotInCour
   );
   router.put("/student/edit", studentController.update);
+  router.delete("/student/:id", studentController.deleteByID);
 };

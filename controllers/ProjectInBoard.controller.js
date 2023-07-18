@@ -6,3 +6,10 @@ exports.insert = function (req, res) {
     res.send(result);
   });
 };
+
+exports.deleteByID = function (req, res) {
+  const id = req.params.id;
+  ProjectInBoard.deleteByID(id, (result) => {
+    res.send(result);
+  });
+};

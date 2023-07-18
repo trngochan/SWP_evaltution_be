@@ -29,4 +29,5 @@ module.exports = function (router) {
     projectController.getProjectMarked
   );
   router.get("/project/getallpubliced", projectController.getPubliceds);
+  router.delete("/project/:id", projectController.deleteByID);
 };

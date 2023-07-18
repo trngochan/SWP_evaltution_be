@@ -23,4 +23,5 @@ module.exports = function (router) {
   router.delete("/teacher/:teacher/delete", teacherController.deleteTeacher);
   router.put("/teacher/edit", teacherController.editTeacher);
   router.post("/teacher/add", teacherController.add);
+  router.delete("/teacher/:id", teacherController.deleteByID);
 };

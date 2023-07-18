@@ -1,5 +1,6 @@
-module.exports = function (route) {
+module.exports = function (router) {
   const ProjectInBoardController = require("../controllers/ProjectInBoard.controller");
 
-  route.post("/projectinboard/insert", ProjectInBoardController.insert);
+  router.post("/projectinboard/insert", ProjectInBoardController.insert);
+  router.delete("/projectinboard/:id", ProjectInBoardController.deleteByID);
 };

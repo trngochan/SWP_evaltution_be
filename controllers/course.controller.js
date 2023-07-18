@@ -1,5 +1,12 @@
 const Course = require("../models/course.model");
 
+exports.deleteByID = function (req, res) {
+  const id = req.params.id;
+  Course.deleteByID(id, (result) => {
+    res.send(result);
+  });
+};
+
 exports.getByStudentID = function (req, res) {
   const studentId = req.params.student;
   Course.getByStuentID(studentId, (result) => {

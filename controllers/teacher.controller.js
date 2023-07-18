@@ -20,6 +20,13 @@ exports.add = function (req, res) {
   });
 };
 
+exports.deleteByID = function (req, res) {
+  const id = req.params.id;
+  Teacher.deleteByID(id, (result) => {
+    res.send(result);
+  });
+};
+
 exports.getByLectureInBoard = function (req, res) {
   const id = req.params.lectureInBoard;
   Teacher.getByLectureInBoard(id, (result) => {

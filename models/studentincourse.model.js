@@ -22,4 +22,29 @@ StudentInCourse.add = function (data, cb) {
   );
 };
 
+StudentInCourse.deleteByID = function (id, cb) {
+  try {
+    db.query(
+      "UPDATE `studentincourse` SET `Status`=0  WHERE Id = ? and Status = 1",
+      [id],
+      function (err, data) {
+        if (err)
+          return cb({
+            status: 401,
+            message: "Delete failed",
+          });
+        return cb({
+          status: 200,
+          message: "Delete successful",
+        });
+      }
+    );
+  } catch (error) {
+    return cb({
+      status: 501,
+      message: "Error deleting course",
+    });
+  }
+};
+
 module.exports = StudentInCourse;

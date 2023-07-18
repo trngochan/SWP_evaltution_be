@@ -6,4 +6,5 @@ module.exports = function (router) {
     "/studentinproject/:stdinprj/remove",
     stdInProjectController.remove
   );
+  router.delete("/studentinproject/:id", stdInProjectController.deleteByID);
 };

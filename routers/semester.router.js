@@ -4,4 +4,5 @@ module.exports = function (router) {
   router.get("/semester/getall", semesterController.getAll);
   router.post("/semester/add", semesterController.add);
   router.get("/semester/:id", semesterController.getById);
+  router.delete("/semester/:id", semesterController.deleteByID);
 };

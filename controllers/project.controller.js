@@ -8,6 +8,13 @@ exports.getById = function (req, res) {
   });
 };
 
+exports.deleteByID = function (req, res) {
+  const id = req.params.id;
+  Project.deleteByID(id, (result) => {
+    res.send(result);
+  });
+};
+
 exports.getPubliceds = function (req, res) {
   Project.getPubliceds((result) => {
     res.send(result);

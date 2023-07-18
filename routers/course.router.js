@@ -8,4 +8,5 @@ module.exports = function (router) {
   router.get("/course/:course/getbyid", courseController.getByID);
   router.get("/course/:subject/getbysubject", courseController.getBySubject);
   router.get("/course/:sem/:sub", courseController.getBySemSub);
+  router.delete("/course/:id", courseController.deleteByID);
 };

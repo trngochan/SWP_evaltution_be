@@ -1,5 +1,12 @@
 const Evalution = require("../models/evalutionboarch.model");
 
+exports.deleteByID = function (req, res) {
+  const id = req.params.id;
+  Evalution.deleteByID(id, (result) => {
+    res.send(result);
+  });
+};
+
 exports.getAll = function (req, res) {
   Evalution.getAll((result) => {
     res.send(result);

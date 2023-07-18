@@ -19,3 +19,10 @@ exports.getById = function (req, res) {
     res.send(result);
   });
 };
+
+exports.deleteByID = function (req, res) {
+  const id = req.params.id;
+  Subject.deleteByID(id, (result) => {
+    res.send(result);
+  });
+};

@@ -4,4 +4,5 @@ module.exports = function (router) {
   router.post("/scorecolumn/adds", scoreColumn.add);
   router.get("/scorecolumn/:template/subject", scoreColumn.getByTemplateId);
   router.get("/scorecolumn/:template", scoreColumn.getByTemplateId);
+  router.delete("/scorecolumn/:id", scoreColumn.deleteByID);
 };

@@ -13,6 +13,13 @@ exports.getByProjectId = function (req, res) {
   });
 };
 
+exports.deleteByID = function (req, res) {
+  const id = req.params.id;
+  Student.deleteByID(id, (result) => {
+    res.send(result);
+  });
+};
+
 exports.getByCourseId = function (req, res) {
   const courseId = req.params.course;
   Student.getByCourseId(courseId, (result) => {
