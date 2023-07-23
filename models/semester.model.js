@@ -22,6 +22,26 @@ semester.getAll = function (cb) {
   }
 };
 
+semester.checkValidDate = function (s, e) {
+  return new Promise((resolve, reject) => {
+    db.query(
+      "SELECT * FROM semester WHERE (? BETWEEN StartTime AND EndTime) OR (? BETWEEN StartTime AND EndTime) OR (StartTime BETWEEN ? AND ?) OR (EndTime BETWEEN ? AND ?);",
+      [s, e, s, e, s, e],
+      (err, result) => {
+        if (err) {
+          reject(err); // Đáng tin cậy hơn khi xử lý lỗi
+        } else {
+          if (result.length > 0) {
+            resolve(false); // Có xung đột thời gian
+          } else {
+            resolve(true); // Không xung đột thời gian
+          }
+        }
+      }
+    );
+  });
+};
+
 semester.getById = function (id, cb) {
   try {
     db.query(
@@ -60,12 +80,22 @@ semester.add = function (data, cb) {
       "INSERT INTO `semester` (`Year`, `Session`, `StartTime`, `EndTime`) values (?, ?, ?,?)",
       data1,
       function (err, results) {
-        if (err) return cb(err);
-        return cb(results);
+        if (err)
+          return cb({
+            status: 400,
+            messaege: "Inset semester error",
+          });
+        return cb({
+          status: 200,
+          messaege: "Inset semester successfully",
+        });
       }
     );
   } catch (error) {
-    cb(error);
+    cb({
+      status: 500,
+      messaege: "Inset semester error",
+    });
   }
 };
 
