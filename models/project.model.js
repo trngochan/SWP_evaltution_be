@@ -65,7 +65,7 @@ Project.getProjectMarked = function (id, cb) {
         if (err)
           return cb({
             status: 401,
-            message: "Error failed",
+            message: err,
           });
         return cb({
           status: 200,

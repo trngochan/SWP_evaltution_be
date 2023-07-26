@@ -11,7 +11,7 @@ Admin.login = function (data, result) {
   console.log(param);
   try {
     db.query(
-      "SELECT username, role, id, address  from admin where username = ? And password = ? and Status = 1",
+      "SELECT username, role, id, address  from admin where Username = ? And Password = ? and Status = 1",
       param,
       function (err, data) {
         if (err) {

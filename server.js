@@ -15,7 +15,7 @@ app.use(
     saveUninitialized: true,
     store: new session.MemoryStore(),
     cookie: {
-      secure: false,
+      secure: true,
       httpOnly: true,
     },
   })
