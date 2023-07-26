@@ -60,7 +60,7 @@ Course.getBySemSub = function (sem, sub, cb) {
 Course.getBySubject = function (id, cb) {
   try {
     db.query(
-      "select * from Course where SubjectId = ? and Status = 1",
+      "select * from course where SubjectId = ? and Status = 1",
       [id],
       function (err, result) {
         if (err) {
