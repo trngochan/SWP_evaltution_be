@@ -59,7 +59,7 @@ Project.update = function (data, cb) {
 Project.getProjectMarked = function (id, cb) {
   try {
     db.query(
-      "SELECT DISTINCT studentinproject.ProjectId from studentinproject, (SELECT DISTINCT Score.StudentInProjectId FROM `score` WHERE LectureInBoardId = ? AND score.Status = 1) AS listStd WHERE studentinproject.Id = listStd.StudentInProjectId AND studentinproject.Status = 1",
+      "SELECT DISTINCT studentinproject.ProjectId from studentinproject, (SELECT DISTINCT score.StudentInProjectId FROM `score` WHERE LectureInBoardId = ? AND score.Status = 1) AS listStd WHERE studentinproject.Id = listStd.StudentInProjectId AND studentinproject.Status = 1",
       [id],
       (err, result) => {
         if (err)

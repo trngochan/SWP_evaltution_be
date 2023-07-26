@@ -40,7 +40,7 @@ Score.getByLiBStdPrj = function (lib, std, prj, cb) {
 Score.updateScore = function (data, cb) {
   try {
     db.query(
-      "UPDATE `score` SET `Score`= ?  WHERE `CourseId`= ?  AND `StudentInProjectId`= ?  AND `LectureInBoardId`= ?  AND `ScoreColumnId`= ? AND Status = 1",
+      "UPDATE `score` SET `score`= ?  WHERE `CourseId`= ?  AND `StudentInProjectId`= ?  AND `LectureInBoardId`= ?  AND `ScoreColumnId`= ? AND Status = 1",
       [
         data.score,
         data.course,
