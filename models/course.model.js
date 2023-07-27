@@ -118,7 +118,7 @@ Course.getByStuentID = function (id, cb) {
 Course.getByTeacherID = function (id, cb) {
   try {
     db.query(
-      `SELECT * from course,lecture where lecture.Id = ${id} AND lecture.id = course.LectureId AND course.Status = 1 AND lecture.Status = 1; `,
+      `SELECT * from lecture,course where lecture.Id = ${id} AND lecture.Id = course.LectureId AND course.Status = 1 AND lecture.Status = 1; `,
       function (err, data) {
         if (err) return cb(err);
         return cb(data);
