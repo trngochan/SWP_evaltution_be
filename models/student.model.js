@@ -197,7 +197,7 @@ Student.add = async function (data, result) {
       return result({ status: 401, message: "Duplicate code" });
     } else {
       // Tiếp tục thực hiện truy vấn thêm sinh viên vào cơ sở dữ liệu
-      const insertQuery = `INSERT INTO student (code, name, birthday, address, username, password, role) VALUES (?, ?, ?, ?, ?, ?, "std")`;
+      const insertQuery = `INSERT INTO student (Code, Name, Birthday, Address, Username, Password, Role) VALUES (?, ?, ?, ?, ?, ?, "std")`;
       db.query(
         insertQuery,
         [
@@ -210,6 +210,7 @@ Student.add = async function (data, result) {
         ],
         (error, insertResult) => {
           if (error) {
+            console.log(error);
             return result({ status: 401, message: "Failed to insert student" });
           } else {
             return result({ status: 200, message: "Insert student success" });
