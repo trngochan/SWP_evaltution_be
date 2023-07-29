@@ -44,6 +44,7 @@ Score.getByScore = function (id, cb) {
       [id],
       function (err, result) {
         if (err) {
+          console.log(err);
           return cb({
             status: 401,
             message: "Failed to getByScore",
