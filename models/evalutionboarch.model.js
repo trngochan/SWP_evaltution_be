@@ -29,7 +29,7 @@ EvulutionBroand.getByProjectId = function (id, cb) {
         if (err)
           return cb({
             status: 401,
-            message: "Insert failed",
+            message: "Get failed",
           });
         return cb({
           status: 201,

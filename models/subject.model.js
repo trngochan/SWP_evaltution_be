@@ -54,25 +54,81 @@ Subject.add = function (data, cb) {
 
 Subject.deleteByID = function (id, cb) {
   try {
-    db.query(
-      "UPDATE `subject` SET `Status`=0  WHERE Id = ? and Status = 1",
-      [id],
-      function (err, data) {
-        if (err)
-          return cb({
-            status: 401,
-            message: "Delete failed",
-          });
+    db.beginTransaction((err) => {
+      if (err) {
         return cb({
-          status: 200,
-          message: "Delete successful",
+          status: 501,
+          message: "Error deleting subject",
         });
       }
-    );
+
+      // Cập nhật trạng thái "Status" của học kỳ có "Id" là "id" thành 0
+      const updateSemesterQuery =
+        "UPDATE `subject` SET `Status`= 0  WHERE Id = ? and Status = 1";
+      db.query(updateSemesterQuery, [id], function (err, data) {
+        if (err) {
+          return db.rollback(() => {
+            return cb({
+              status: 401,
+              message: "Delete failed",
+            });
+          });
+        }
+      });
+
+      // Cập nhật trạng thái "Status" của các khóa học liên quan
+      const updateCoursesQuery =
+        "UPDATE `course` SET `Status`= 0  WHERE SubjectId = ? and Status = 1";
+      db.query(updateCoursesQuery, [id], function (err, data) {
+        if (err) {
+          return db.rollback(() => {
+            return cb({
+              status: 401,
+              message: "Delete failed",
+            });
+          });
+        }
+
+        const updateGroupsQuery = `
+          UPDATE project
+          SET Status = 0
+          WHERE CourseId IN (
+            SELECT Id
+            FROM course
+            WHERE SubjectId = ?
+          ) and Status = 1
+        `;
+        db.query(updateGroupsQuery, [id], function (err, data) {
+          if (err) {
+            return db.rollback(() => {
+              return cb({
+                status: 401,
+                message: "Delete failed",
+              });
+            });
+          }
+          db.commit((err) => {
+            if (err) {
+              return db.rollback(() => {
+                return cb({
+                  status: 501,
+                  message: "Error deleting subject",
+                });
+              });
+            }
+
+            return cb({
+              status: 200,
+              message: "Delete successful",
+            });
+          });
+        });
+      });
+    });
   } catch (error) {
     return cb({
       status: 501,
-      message: "Error deleting course",
+      message: "Error deleting subject",
     });
   }
 };
