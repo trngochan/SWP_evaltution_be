@@ -40,7 +40,7 @@ Score.getByLiBStdPrj = function (lib, std, prj, cb) {
 Score.getByScore = function (id, cb) {
   try {
     db.query(
-      "SELECT DISTINCT StudentId, Code, Name, Score, Result, ProjectId FROM (SELECT * from (SELECT studentinproject.Id as StudentInProjectId, projects.projectId, studentinproject.StudentId from (select project.Id as ProjectId from course, project WHERE course.Id = ? and course.Id = project.CourseId AND course.Status = 1 AND project.Status = 1) as projects, studentinproject WHERE projects.projectId = studentinproject.ProjectId AND studentinproject.Status = 1) as stds, student WHERE stds.StudentId = student.Id AND student.Status = 1) as students left JOIN Score ON students.StudentInProjectId = Score.StudentInProjectId AND Score.isAvarage = 1 AND Score.Status = 1",
+      "SELECT DISTINCT StudentId, Code, Name, Score, Result, ProjectId FROM (SELECT * from (SELECT studentinproject.Id as StudentInProjectId, projects.projectId, studentinproject.StudentId from (select project.Id as ProjectId from course, project WHERE course.Id = ? and course.Id = project.CourseId AND course.Status = 1 AND project.Status = 1) as projects, studentinproject WHERE projects.projectId = studentinproject.ProjectId AND studentinproject.Status = 1) as stds, student WHERE stds.StudentId = student.Id AND student.Status = 1) as students left JOIN score ON students.StudentInProjectId = score.StudentInProjectId AND score.isAvarage = 1 AND score.Status = 1",
       [id],
       function (err, result) {
         if (err) {
