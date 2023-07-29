@@ -25,6 +25,13 @@ exports.deleteByID = function (req, res) {
   });
 };
 
+exports.getByScore = function (req, res) {
+  const id = req.params.id;
+  Score.getByScore(id, (result) => {
+    res.send(result);
+  });
+};
+
 exports.updateScore = function (req, res) {
   const data = req.body;
   Score.updateScore(data, (result) => {

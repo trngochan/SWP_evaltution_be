@@ -37,6 +37,33 @@ Score.getByLiBStdPrj = function (lib, std, prj, cb) {
   }
 };
 
+Score.getByScore = function (id, cb) {
+  try {
+    db.query(
+      "SELECT StudentId, Code, Name, Score, Result, ProjectId FROM (SELECT * from (SELECT studentinproject.Id as StudentInProjectId, projects.projectId, studentinproject.StudentId from (select project.Id as ProjectId from course, project WHERE course.Id = ? and course.Id = project.CourseId AND course.Status = 1 AND project.Status = 1) as projects, studentinproject WHERE projects.projectId = studentinproject.ProjectId AND studentinproject.Status = 1) as stds, student WHERE stds.StudentId = student.Id AND student.Status = 1) as students left JOIN Score ON students.StudentInProjectId = Score.StudentInProjectId AND Score.isAvarage = 1 AND Score.Status = 1",
+      [id],
+      function (err, result) {
+        if (err) {
+          return cb({
+            status: 401,
+            message: "Failed to getByScore",
+          });
+        }
+        return cb({
+          status: 200,
+          data: result,
+        });
+      }
+    );
+  } catch (error) {
+    console.log(error);
+    return cb({
+      status: 500,
+      message: "Error at add getByLiBStdPrj",
+    });
+  }
+};
+
 Score.updateScore = function (data, cb) {
   try {
     db.query(
