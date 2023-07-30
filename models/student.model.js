@@ -34,6 +34,25 @@ Student.login = function (data, result) {
   }
 };
 
+Student.getByNohasProject = function (id, cb) {
+  try {
+    db.query(
+      "SELECT Code, Name from student, studentincourse WHERE student.Id = studentincourse.StudentId and studentincourse.CourseId = ? AND student.Id NOT IN (SELECT DISTINCT studentinproject.StudentId FROM (SELECT project.Id FROM project,course WHERE course.Id = project.CourseId AND course.Id = ? AND project.Status = 1 AND course.Status = 1 )  as projects, studentinproject WHERE projects.Id =  studentinproject.ProjectId AND studentinproject.Status = 1) AND student.Status = 1 AND studentincourse.Status = 1",
+      [id, id],
+      (error, Result) => {
+        if (error) {
+          return cb({ status: 401, message: "Failed to get student" });
+        } else {
+          return cb({ status: 200, data: Result });
+        }
+      }
+    );
+  } catch (error) {
+    console.log(error);
+    return cb({ status: 500, message: "Error at getStdNotInProject" });
+  }
+};
+
 Student.update = function (data, cb) {
   try {
     db.query(

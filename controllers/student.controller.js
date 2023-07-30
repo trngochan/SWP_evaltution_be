@@ -27,6 +27,13 @@ exports.getByCourseId = function (req, res) {
   });
 };
 
+exports.getByNohasProject = function (req, res) {
+  const courseId = req.params.course;
+  Student.getByNohasProject(courseId, (result) => {
+    res.send(result);
+  });
+};
+
 exports.getById = function (req, res) {
   const studentId = req.params.student;
   Student.getById(studentId, (result) => {
